@@ -1,0 +1,302 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} · CMS to Commerce Hub{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Produktdetail</p>
+            <h1>{{ product.name }}</h1>
+            <p>{{ product.brand ?: 'ohne Marke' }} · {{ product.categoryPath ?: 'Kategorie offen' }}</p>
+        </div>
+        <div class="button-group">
+            <a class="button" href="{{ path('app_product_index') }}">Zurück zur Liste</a>
+            <a class="button" href="{{ path('app_product_edit', {id: product.id}) }}">Bearbeiten</a>
+            <a class="button button-primary" href="{{ path('app_product_new') }}">Weiteres Produkt importieren</a>
+            <form class="inline-form" method="post" action="{{ path('app_product_delete', {id: product.id}) }}" onsubmit="return confirm('Produkt wirklich löschen?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('product_delete_' ~ product.id) }}">
+                <button class="button button-danger" type="submit">Löschen</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Stammdaten</h2>
+            <ul class="simple-list">
+                <li><span>Status</span><strong>{{ product.status.label }}</strong></li>
+                <li><span>Quellen</span><strong>{{ product.sources|length }}</strong></li>
+                <li><span>Medien</span><strong>{{ product.assets|length }}</strong></li>
+                <li><span>Varianten</span><strong>{{ product.variants|length }}</strong></li>
+            </ul>
+            <p>{{ product.description ?: 'Noch keine Beschreibung vorhanden.' }}</p>
+        </div>
+
+        <div class="panel">
+            <h2>Varianten</h2>
+            <div class="stack">
+                {% for variant in product.variants %}
+                    <article class="mini-card">
+                        <h3>{{ variant.sku }}</h3>
+                        <p>{{ variant.optionSummary|json_encode(constant('JSON_UNESCAPED_UNICODE')) }}</p>
+                        <p>
+                            {% if variant.priceGross %}{{ variant.priceGross }} {{ variant.currency }} · {% endif %}
+                            {{ variant.stock is not null ? variant.stock ~ ' Lager' : 'kein Lagerwert' }}
+                        </p>
+                    </article>
+                {% else %}
+                    <p>Keine Varianten angelegt.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="row-between">
+            <h2>Medien</h2>
+            <a class="button" href="{{ path('app_product_edit', {id: product.id}) }}">Bilder ergänzen</a>
+        </div>
+        <div class="asset-grid">
+            {% for asset in product.assets %}
+                <article class="mini-card">
+                    {% if asset.mimeType starts with 'image/' %}
+                        <img class="asset-preview" src="{{ path('app_product_asset_show', {id: asset.id}) }}" alt="{{ asset.altText ?: asset.originalName }}">
+                    {% endif %}
+                    <h3>{{ asset.originalName }}</h3>
+                    <p>{{ asset.mimeType }} · Position {{ asset.position }}</p>
+                </article>
+            {% else %}
+                <p>Noch keine Dateien hochgeladen.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="grid-2">
+        {% for channel in channels %}
+            {% set exportData = exports[channel.value] %}
+            {% set panelMeta = channel_panels[channel.value] %}
+            <div class="panel">
+                <div class="row-between">
+                    <h2>{{ channel.label }}</h2>
+                    <span class="badge {{ panelMeta.listing_badge_class }}">{{ panelMeta.listing ? panelMeta.listing.status.label : 'Entwurf' }}</span>
+                </div>
+
+                <div class="stack">
+                    <article class="mini-card channel-status-card">
+                        <div class="row-between">
+                            <h3>Kanalstatus</h3>
+                            <span class="badge {{ panelMeta.latest_run_status_label ? panelMeta.latest_run_badge_class : 'badge-warning' }}">
+                                {{ panelMeta.latest_run_status_label ?: panelMeta.latest_run_fallback_label }}
+                            </span>
+                        </div>
+
+                        <ul class="simple-list compact-list">
+                            <li>
+                                <span>Listing-Status</span>
+                                <strong>{{ panelMeta.listing ? panelMeta.listing.status.label : 'Entwurf' }}</strong>
+                            </li>
+                            <li>
+                                <span>{{ panelMeta.last_sync_label }}</span>
+                                <strong>{{ panelMeta.listing and panelMeta.listing.lastSyncedAt ? panelMeta.listing.lastSyncedAt|date('d.m.Y H:i') : 'noch nicht synchronisiert' }}</strong>
+                            </li>
+                            <li>
+                                <span>Letzter Lauf</span>
+                                <strong>{{ panelMeta.latest_run ? panelMeta.latest_run.startedAt|date('d.m.Y H:i') : 'noch kein protokollierter Lauf' }}</strong>
+                            </li>
+                            <li>
+                                <span>Aktion</span>
+                                {% if panelMeta.sync_mode_label %}
+                                    <strong><span class="badge {{ panelMeta.sync_mode_badge_class }}">{{ panelMeta.sync_mode_label }}</span></strong>
+                                {% else %}
+                                    <strong>noch nicht ableitbar</strong>
+                                {% endif %}
+                            </li>
+                        </ul>
+
+                        {% if panelMeta.latest_run_summary %}
+                            <p>{{ panelMeta.latest_run_summary }}</p>
+                        {% endif %}
+
+                        {% if channel.value == 'amazon' %}
+                            <ul class="simple-list compact-list">
+                                <li>
+                                    <span>Amazon-ASIN</span>
+                                    <strong>{{ panelMeta.external_id ?: 'noch keine Rückmeldung' }}</strong>
+                                </li>
+                                <li>
+                                    <span>Product Type</span>
+                                    <strong>{{ panelMeta.amazon_product_type ?: 'noch nicht aufgelöst' }}</strong>
+                                </li>
+                                <li>
+                                    <span>Modus</span>
+                                    <strong>{{ panelMeta.amazon_validation_mode ?: 'noch keine Vorschau' }}</strong>
+                                </li>
+                                <li>
+                                    <span>Anforderungen</span>
+                                    <strong>{{ panelMeta.amazon_requirements ?: 'noch offen' }}</strong>
+                                </li>
+                                <li>
+                                    <span>Validierungsstatus</span>
+                                    <strong>{{ panelMeta.amazon_validation_status ?: 'noch keine Rückgabe' }}</strong>
+                                </li>
+                                <li>
+                                    <span>Gemappte Attribute</span>
+                                    <strong>{{ panelMeta.amazon_mapped_attribute_count is not null ? panelMeta.amazon_mapped_attribute_count : 'noch keine' }}</strong>
+                                </li>
+                                <li>
+                                    <span>Bildslots im Payload</span>
+                                    <strong>{{ panelMeta.amazon_image_attribute_count is not null ? panelMeta.amazon_image_attribute_count : 0 }}</strong>
+                                </li>
+                                <li>
+                                    <span>Live-Publish</span>
+                                    <strong>{{ panelMeta.amazon_live_publish_active is same as(true) ? 'aktiv' : 'deaktiviert' }}</strong>
+                                </li>
+                            </ul>
+
+                            <p>
+                                <strong>Lokale Pflichtlücken:</strong>
+                                {{ panelMeta.amazon_missing_attributes_local ? panelMeta.amazon_missing_attributes_local|join(', ') : 'keine erkannt' }}
+                            </p>
+                            <p>
+                                <strong>Amazon-Rückmeldung:</strong>
+                                {{ panelMeta.amazon_missing_attributes_amazon ? panelMeta.amazon_missing_attributes_amazon|join(', ') : 'keine fehlenden Pflichtattribute gemeldet' }}
+                            </p>
+                        {% endif %}
+
+                        {% if channel.value == 'shopware' %}
+                            <ul class="simple-list compact-list">
+                                <li>
+                                    <span>Produktnummer</span>
+                                    <strong><code>{{ panelMeta.product_number }}</code></strong>
+                                </li>
+                                <li>
+                                    <span>Shopware-ID</span>
+                                    <strong>{{ panelMeta.external_id ?: 'noch nicht verknüpft' }}</strong>
+                                </li>
+                            </ul>
+
+                            <div class="button-group">
+                                {% if panelMeta.admin_url %}
+                                    <a class="button" href="{{ panelMeta.admin_url }}" target="_blank" rel="noreferrer noopener">Shopware Admin</a>
+                                {% endif %}
+                                {% if panelMeta.storefront_search_url %}
+                                    <a class="button" href="{{ panelMeta.storefront_search_url }}" target="_blank" rel="noreferrer noopener">Im Shop suchen</a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </article>
+
+                    <article class="mini-card">
+                        <h3>Titel</h3>
+                        <p><strong>{{ exportData.produktseite.titel }}</strong></p>
+                    </article>
+
+                    <article class="mini-card">
+                        <h3>Bulletpoints</h3>
+                        <ul class="bullets">
+                            {% for bullet in exportData.produktseite.bulletpoints %}
+                                <li>{{ bullet }}</li>
+                            {% else %}
+                                <li>Noch keine Bulletpoints erzeugt.</li>
+                            {% endfor %}
+                        </ul>
+                    </article>
+
+                    <article class="mini-card">
+                        <h3>Qualitätsreview</h3>
+                        <p>Qualitätswert {{ exportData.qualitaetspruefung.punktzahl }} / 100 · Note {{ exportData.qualitaetspruefung.note }}</p>
+                        <p><strong>Blocker:</strong> {{ exportData.qualitaetspruefung.blocker ? exportData.qualitaetspruefung.blocker|join(' | ') : 'keine harten Blocker erkannt' }}</p>
+                        <p><strong>Maßnahmen:</strong> {{ exportData.qualitaetspruefung.massnahmen_fuer_a_niveau ? exportData.qualitaetspruefung.massnahmen_fuer_a_niveau|join(' | ') : 'keine' }}</p>
+                    </article>
+
+                    <article class="mini-card">
+                        <h3>Bildreihenfolge</h3>
+                        <ul class="bullets">
+                            {% for image in exportData.produktseite.bildreihenfolge %}
+                                <li>#{{ image.position }} · {{ image.rolle }} · {{ image.originaldateiname }}</li>
+                            {% else %}
+                                <li>Noch keine Medien vorhanden.</li>
+                            {% endfor %}
+                        </ul>
+                        {% if exportData.produktseite.bild_hinweise %}
+                            <p>{{ exportData.produktseite.bild_hinweise|join(' | ') }}</p>
+                        {% endif %}
+                    </article>
+
+                    <article class="mini-card">
+                        <h3>Quelle & Export</h3>
+                        <p><a href="{{ path('app_product_export', {id: product.id, channel: channel.value}) }}">JSON-Export öffnen</a></p>
+                        <p>Der technische Export bleibt als JSON abrufbar und wird nicht vollständig in der Oberfläche eingebettet.</p>
+                        {% if channel.value == 'amazon' %}
+                            <p>JTL kann jetzt als Preview geprüft und bei aktiver Freigabe direkt mit den optimierten CTC-Texten aktualisiert werden.</p>
+                            <div class="button-group">
+                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'jtl'}) }}">JTL Preview</a>
+                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'jtl'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live nach JTL senden?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_jtl') }}">
+                                    <button class="button button-primary" type="submit">JTL live senden</button>
+                                </form>
+                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'plentymarkets'}) }}">plentymarkets Preview</a>
+                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'plentymarkets'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live nach plentymarkets senden?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_plentymarkets') }}">
+                                    <button class="button button-primary" type="submit">plentymarkets live senden</button>
+                                </form>
+                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'xentral'}) }}">Xentral Preview</a>
+                            </div>
+                        {% endif %}
+                    </article>
+                </div>
+
+                <div class="button-group">
+                    <form method="post" action="{{ path('app_product_prepare', {id: product.id, channel: channel.value}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('prepare_' ~ product.id ~ '_' ~ channel.value) }}">
+                        <button class="button" type="submit">Entwurf neu erzeugen</button>
+                    </form>
+                    <form method="post" action="{{ path('app_product_publish', {id: product.id, channel: channel.value}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('publish_' ~ product.id ~ '_' ~ channel.value) }}">
+                        <button class="button button-primary" type="submit">{{ panelMeta.publish_button_label }}</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Quelltexte</h2>
+            <div class="stack">
+                {% for source in product.sources %}
+                    <article class="mini-card">
+                        <div class="row-between">
+                            <h3>{{ source.sourceType.label }}</h3>
+                            <span class="badge">{{ source.languageCode }}</span>
+                        </div>
+                        <p>{{ source.cmsSystem ?: 'manuell' }}{% if source.externalReference %} · {{ source.externalReference }}{% endif %}</p>
+                        <pre class="code-block">{{ source.rawPayload }}</pre>
+                    </article>
+                {% else %}
+                    <p>Keine Quelltexte gespeichert.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Veröffentlichungsläufe</h2>
+            <div class="stack">
+                {% for run in publication_runs %}
+                    <article class="mini-card">
+                        <div class="row-between">
+                            <h3>{{ run.channel.label }} · {{ run.actionLabel }}</h3>
+                            <span class="badge {{ run.status.value == 'succeeded' ? 'badge-success' : (run.status.value == 'failed' ? 'badge-warning' : 'badge') }}">{{ run.status.label }}</span>
+                        </div>
+                        <p>{{ run.startedAt|date('d.m.Y H:i') }}{% if run.summary %} — {{ run.summary }}{% endif %}</p>
+                        {% if run.payload %}
+                            <pre class="code-block">{{ run.payload|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES')) }}</pre>
+                        {% endif %}
+                    </article>
+                {% else %}
+                    <p>Noch keine Sync-Läufe vorhanden.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

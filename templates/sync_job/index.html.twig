@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sync-Jobs · CMS to Commerce Hub{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Automatisierung</p>
+            <h1>Sync-Jobs</h1>
+            <p>Hier legst du zeitgesteuerte Upsert- und Delta-Läufe für JTL, plentymarkets und Xentral an.</p>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Neuen Job anlegen</h2>
+            <form class="stack" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('sync_job_create') }}">
+
+                <label>
+                    <span>Name</span>
+                    <input type="text" name="name" required>
+                </label>
+
+                <label>
+                    <span>System</span>
+                    <select name="system">
+                        {% for system in systems %}
+                            <option value="{{ system.value }}">{{ system.label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label>
+                    <span>Modus</span>
+                    <select name="mode">
+                        {% for mode in modes %}
+                            <option value="{{ mode.value }}">{{ mode.label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label>
+                    <span>Quell-URL</span>
+                    <input type="url" name="source_url" placeholder="https://...">
+                </label>
+
+                <label>
+                    <span>oder Quelldatei</span>
+                    <input type="text" name="source_file_path" placeholder="C:\pfad\job.json">
+                </label>
+
+                <label>
+                    <span>HTTP-Methode</span>
+                    <select name="request_method">
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>PUT</option>
+                    </select>
+                </label>
+
+                <label>
+                    <span>Intervall in Minuten</span>
+                    <input type="number" min="1" name="interval_minutes" value="60">
+                </label>
+
+                <label>
+                    <span>Header JSON</span>
+                    <textarea name="request_headers_json" rows="4">{}</textarea>
+                </label>
+
+                <label>
+                    <span>Body JSON</span>
+                    <textarea name="request_body_json" rows="6">{}</textarea>
+                </label>
+
+                <label>
+                    <input type="checkbox" name="enabled" value="1" checked>
+                    <span>Job aktiv</span>
+                </label>
+
+                <div class="button-group">
+                    <button class="button button-primary" type="submit">Job speichern</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="panel">
+            <h2>Cron / Server-Aufruf</h2>
+            <div class="stack">
+                <article class="mini-card">
+                    <h3>Fällige Jobs ausführen</h3>
+                    <pre class="code-block">php bin/console app:external-sync:run-due-jobs</pre>
+                    <p>Den Befehl kannst du z. B. alle 5 Minuten per Cron oder Server-Task aufrufen. CTC prüft dann selbst, welche Jobs wirklich fällig sind.</p>
+                </article>
+
+                <article class="mini-card">
+                    <h3>Typische Reihenfolge</h3>
+                    <p>Für laufende Bestände und Preise ist Delta meistens richtig. Für vollständige Produktübernahmen inkl. Medien ist Upsert die bessere Basis.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Bestehende Jobs</h2>
+        <div class="stack">
+            {% if storageUnavailable %}
+                <article class="mini-card">
+                    <h3>Jobspeicher momentan nicht erreichbar</h3>
+                    <p>CTC konnte die gespeicherten Sync-Jobs gerade nicht laden. Sobald die Datenbankverbindung wieder steht, erscheinen die Jobs hier automatisch.</p>
+                </article>
+            {% endif %}
+
+            {% for job in jobs %}
+                <article class="mini-card">
+                    <div class="row-between">
+                        <div>
+                            <h3>{{ job.name }}</h3>
+                            <p>{{ job.system.label }} · {{ job.mode.label }} · alle {{ job.intervalMinutes }} Min.</p>
+                        </div>
+                        <span class="badge {{ job.enabled ? 'badge-success' : 'badge-warning' }}">{{ job.enabled ? 'aktiv' : 'pausiert' }}</span>
+                    </div>
+
+                    <ul class="simple-list compact-list">
+                        <li>
+                            <span>Quelle</span>
+                            <strong>{{ job.sourceUrl ?: job.sourceFilePath ?: 'nicht gesetzt' }}</strong>
+                        </li>
+                        <li>
+                            <span>Nächste Fälligkeit</span>
+                            <strong>{{ job.nextDueAt|date('d.m.Y H:i') }}</strong>
+                        </li>
+                        <li>
+                            <span>Letzter Lauf</span>
+                            <strong>{{ job.lastRunAt ? job.lastRunAt|date('d.m.Y H:i') : 'noch nie' }}</strong>
+                        </li>
+                        <li>
+                            <span>Status</span>
+                            <strong>{{ job.lastStatus ?: 'offen' }}</strong>
+                        </li>
+                    </ul>
+
+                    {% if job.lastMessage %}
+                        <p>{{ job.lastMessage }}</p>
+                    {% endif %}
+
+                    <div class="button-group">
+                        <form method="post" action="{{ path('app_sync_job_run', {id: job.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('sync_job_run_' ~ job.id) }}">
+                            <button class="button button-primary" type="submit">Jetzt ausführen</button>
+                        </form>
+                        <form method="post" action="{{ path('app_sync_job_delete', {id: job.id}) }}" onsubmit="return confirm('Job wirklich löschen?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('sync_job_delete_' ~ job.id) }}">
+                            <button class="button button-danger" type="submit">Löschen</button>
+                        </form>
+                    </div>
+                </article>
+            {% else %}
+                <article class="mini-card">
+                    <h3>Noch keine Sync-Jobs</h3>
+                    <p>Lege oben deinen ersten zeitgesteuerten Upsert- oder Delta-Job an.</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

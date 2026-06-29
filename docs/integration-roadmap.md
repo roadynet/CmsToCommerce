@@ -1,0 +1,110 @@
+# Integrations-Roadmap für CTC
+
+## Amazon: von "Verbindung steht" zu "erstes echtes Listing"
+
+CTC trennt den Amazon-Weg jetzt in vier saubere Schritte:
+
+1. CTC-Produktart und Kategorie heuristisch vorbereiten
+2. `searchDefinitionsProductTypes` gegen die Amazon Product Type Definitions API ausführen
+3. den besten Treffer mit `getDefinitionsProductType` validieren
+4. Pflichtattribute auf das Amazon-Schema mappen und erst dann `putListingsItem` bauen
+5. zuerst im Modus `VALIDATION_PREVIEW` prüfen
+6. erst mit aktiviertem `AMAZON_ENABLE_LIVE_PUBLISH=1` den echten Live-Submit ausführen
+
+### Aktuelle CTC-Heuristiken
+
+- `Trinkflasche` -> Keywords wie `water bottle`, `insulated bottle`, `drink bottle`
+- `Schneidebrett` -> Keywords wie `cutting board`, `chopping board`, `serving board`
+- `Schreibtischlampe` / `Tischleuchte` -> Keywords wie `desk lamp`, `table lamp`, `task light`
+
+Die lokalen Regeln liefern bewusst nur Suchbegriffe und keine hart verdrahteten Amazon-Product-Types. Die endgültige Auswahl kommt aus der Amazon-API selbst.
+
+### Aktueller Payload-Stand in CTC
+
+CTC kann jetzt abhängig von den vorhandenen Daten zwei sinnvolle Amazon-Wege fahren:
+
+- `LISTING_PRODUCT_ONLY`, wenn nur Produktdaten vorliegen
+- `LISTING`, wenn zusätzlich Preis und Bestand aus aktiven Varianten vorliegen
+
+Zusätzlich mappt CTC jetzt:
+
+- Titel, Bulletpoints, Beschreibung, Marke, Farbe, Material, Größe
+- Preis zu `purchasable_offer`
+- Bestand zu `fulfillment_availability`
+- Produktbilder zu `main_product_image_locator` und `other_product_image_locator_*`
+
+Live bleibt standardmäßig aus. So kann das Amazon-Schema vollständig geprüft werden, ohne versehentlich echte Katalogänderungen anzustoßen.
+
+## Empfohlene Reihenfolge für Warenwirtschaft / ERP in CTC
+
+### 1. JTL
+
+Warum zuerst:
+
+- sehr stark im deutschsprachigen Handel
+- gute Passung für Artikelstamm, Varianten, Bilder, Kategorien, Lager und Preise
+- hoher Nutzen für produktzentrierte Workflows in CTC
+
+Empfohlene Adapter-Reihenfolge:
+
+1. Lesender Artikel- und Varianteneingang
+2. Medien, Kategorien, Merkmale
+3. Delta-Sync für Bestand und Preis
+4. optionales Write-back für optimierte Listing-Texte
+
+Aktueller CTC-Stand:
+
+- Preview-Write-back für JTL ist vorhanden
+- Live-Write-back für optimierte Titel-, Kurzbeschreibung-, Beschreibung- und SEO-Texte ist vorbereitet
+- Zielartikel wird zuerst über die gespeicherte JTL-Referenz aufgelöst, sonst über SKU/EAN via JTL-Items-API gesucht
+- Sicherheitsmodus: Live-Senden bleibt aus, bis `JTL_ENABLE_LIVE_WRITEBACK=1` gesetzt ist
+
+### 2. plentymarkets
+
+Warum als Nächstes:
+
+- stark kanal- und marktplatzorientiert
+- sehr passend für CTC, wenn aus einem zentralen Produktstamm mehrere Kanäle bedient werden
+- gute Anschlussstelle für spätere Kanalstatus- und Publish-Feedback-Loops
+
+Empfohlene Adapter-Reihenfolge:
+
+1. Artikeldaten und Varianten lesen
+2. Marktplatz- und Kanalbezüge übernehmen
+3. Preis-/Bestandsdeltas
+4. optionales Zurückschreiben von kanalbezogenen Inhalten
+
+Aktueller CTC-Stand:
+
+- Preview-Write-back für plentymarkets ist vorhanden
+- Live-Write-back für Variationstexte ist vorbereitet
+- Zielvariation wird über `itemId:variationId` aus der Importquelle oder per SKU/EAN über die Varianten-Suche aufgelöst
+- Sicherheitsmodus: Live-Senden bleibt aus, bis `PLENTY_ENABLE_LIVE_WRITEBACK=1` gesetzt ist
+
+### 3. Xentral
+
+Warum danach:
+
+- API-freundlich und modern für Cloud-orientierte Abläufe
+- sinnvoll, wenn CTC später stärker in ERP-, Prozess- und Team-Workflows eingebettet wird
+- etwas eher als Prozess-Backbone als als reines Listing-System relevant
+
+Empfohlene Adapter-Reihenfolge:
+
+1. Artikelstamm und Medien lesen
+2. Bestände, Preise, Einkauf/Logistik-Kontext
+3. Status- und Freigabeinformationen koppeln
+4. optionales Write-back für interne Produktdatenfelder
+
+## Technische Integrationslogik in CTC
+
+Unabhängig vom Zielsystem sollte jeder neue Connector in derselben Reihenfolge wachsen:
+
+1. Intake lesen
+2. Daten normalisieren
+3. Medien zuordnen
+4. Variantenmodell auflösen
+5. Delta-Sync ergänzen
+6. optionales Write-back aktivieren
+
+So bleibt CTC konsistent, auch wenn später weitere Systeme wie Akeneo, Tradebyte, Microsoft Business Central oder SAP dazukommen.

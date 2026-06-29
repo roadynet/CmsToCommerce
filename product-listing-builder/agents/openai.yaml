@@ -1,0 +1,7 @@
+interface:
+  display_name: "Product Listing Builder"
+  short_description: "Build marketplace-ready listings from TXT and photos"
+  default_prompt: "Use $product-listing-builder to turn attached TXT data and product photos into a marketplace-ready listing for Amazon or Shopware."
+
+policy:
+  allow_implicit_invocation: true

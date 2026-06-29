@@ -1,0 +1,52 @@
+# CMS to Commerce Hub
+
+Symfony-Plattform für einen geschützten Produkt-Workflow von CMS-/Dateiimport bis zu marktplatzfähigen Amazon- und Shopware-Listings.
+
+## Enthaltene Funktionen
+
+- Admin-Login
+- Produkt-Intake per Webformular
+- Listenimport mit TXT-Dateien und separaten Produktbildern
+- Intake-API (`POST /api/intake`) mit Token-Schutz
+- Produktstamm mit Quellen, Assets, Varianten und Channel-Entwürfen
+- Amazon-A-Listing-Drafts mit Qualitätsprüfung
+- Shopware Admin API inklusive Produkt- und Medienzuordnung
+- vorbereitete Amazon-SP-API-Anbindung ohne Live-Testzwang
+- JTL-, plentymarkets- und Xentral-Vorbereitung mit Sync-/Write-back-Flows
+- zeitgesteuerte externe Sync-Jobs
+- Export-Vorschau als JSON pro Channel
+
+## Lokal starten
+
+```bash
+composer install
+php bin/console doctrine:migrations:migrate
+php bin/console asset-map:compile
+symfony server:start
+```
+
+Für lokale Entwicklung nutzt die committed `.env` nur Dummy-/Defaultwerte.
+
+## Secrets und produktive Servervariablen
+
+Produktive Zugangsdaten gehören nicht ins Repository. CTC lädt sensible Werte in dieser Reihenfolge:
+
+1. globale Server-/Umgebungsvariablen, zum Beispiel Hosting-Panel, Apache `SetEnv` oder PHP-FPM-Environment
+2. private Dateien außerhalb des Projektordners unter `../private-config/ctc*.env`
+3. harmlose Defaults aus der committed `.env`
+
+Wichtige Variablen:
+
+- `APP_SECRET`
+- `APP_ADMIN_PASSWORD_HASH`
+- `APP_IMPORT_API_TOKEN`
+- `DATABASE_URL`
+- `SHOPWARE_*`
+- `AMAZON_*`
+- `JTL_*`
+- `PLENTY_*`
+
+Beispiele liegen in:
+
+- [docs/private-config.example.env](docs/private-config.example.env)
+- [docs/server-env.example.apache.conf](docs/server-env.example.apache.conf)

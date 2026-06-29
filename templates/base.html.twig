@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}CMS to Commerce Hub{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.1em%22 font-size=%2296%22>🛒</text></svg>">
+        {% block stylesheets %}{% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="shell row-between">
+                <a class="brand" href="{{ path('app_dashboard') }}">CMS to Commerce Hub</a>
+                <nav class="site-nav">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_dashboard') }}">Übersicht</a>
+                        <a href="{{ path('app_form_hub_index') }}">Formulare</a>
+                        <a href="{{ path('app_product_index') }}">Produkte</a>
+                        <a href="{{ path('app_sync_job_index') }}">Sync-Jobs</a>
+                        <a href="{{ path('app_product_new') }}">Neues Produkt</a>
+                        <a href="{{ path('app_logout') }}">Abmelden</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}">Anmelden</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+        <main class="shell site-main">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash flash-{{ label }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </main>
+    </body>
+</html>

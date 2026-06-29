@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} bearbeiten · CMS to Commerce Hub{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Bearbeiten</p>
+            <h1>{{ product.name }}</h1>
+            <p>Hier kannst du Stammdaten anpassen, Varianten neu setzen und weitere Bilder anhängen.</p>
+        </div>
+        <div class="button-group">
+            <a class="button" href="{{ path('app_product_show', {id: product.id}) }}">Zur Produktansicht</a>
+            <a class="button" href="{{ path('app_product_index') }}">Zur Liste</a>
+        </div>
+    </section>
+
+    {% if errors %}
+        <section class="panel">
+            <h2>Bitte Eingaben prüfen</h2>
+            <ul class="simple-list">
+                {% for error in errors %}
+                    <li><span>{{ error }}</span></li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    <form class="panel form-grid" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token('product_edit_' ~ product.id) }}">
+
+        <div class="form-group">
+            <label for="name">Produktname</label>
+            <input id="name" name="name" value="{{ form_data.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                {% for status in status_options %}
+                    <option value="{{ status.value }}" {% if form_data.status == status.value %}selected{% endif %}>{{ status.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Marke</label>
+            <input id="brand" name="brand" value="{{ form_data.brand }}">
+        </div>
+
+        <div class="form-group">
+            <label for="category_path">Kategorie</label>
+            <input id="category_path" name="category_path" value="{{ form_data.category_path }}" placeholder="z. B. Küche > Schneidebretter">
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="description">Beschreibung</label>
+            <textarea id="description" name="description" rows="6">{{ form_data.description }}</textarea>
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="variants_text">Varianten</label>
+            <textarea id="variants_text" name="variants_text" rows="10" placeholder='Beispiel Zeilenformat:&#10;SKU-ROT-M | Farbe=Rot | Größe=M | preis=29,90 | bestand=8&#10;&#10;Oder JSON: [{"sku":"SKU-SCHWARZ","optionen":{"Farbe":"Schwarz"}}]'>{{ form_data.variants_text }}</textarea>
+            <small>Beim Speichern werden die vorhandenen Varianten durch diesen Stand ersetzt.</small>
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="images">Weitere Bilder hinzufügen</label>
+            <input id="images" type="file" name="images[]" accept="image/*,.png,.jpg,.jpeg,.webp" multiple>
+            <small>Bestehende Bilder bleiben erhalten, neue Uploads werden zusätzlich am Produkt gespeichert.</small>
+        </div>
+
+        {% if product.assets|length > 0 %}
+            <div class="form-group form-group-full">
+                <h2>Bereits gespeicherte Bilder</h2>
+                <div class="asset-grid">
+                    {% for asset in product.assets %}
+                        <article class="mini-card">
+                            {% if asset.mimeType starts with 'image/' %}
+                                <img class="asset-preview" src="{{ path('app_product_asset_show', {id: asset.id}) }}" alt="{{ asset.altText ?: asset.originalName }}">
+                            {% endif %}
+                            <h3>{{ asset.originalName }}</h3>
+                            <p>{{ asset.mimeType }} · Position {{ asset.position }}</p>
+                        </article>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="button-group">
+            <button class="button button-primary" type="submit">Änderungen speichern</button>
+            <a class="button" href="{{ path('app_product_show', {id: product.id}) }}">Abbrechen</a>
+        </div>
+    </form>
+{% endblock %}

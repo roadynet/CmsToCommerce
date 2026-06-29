@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulare · CMS to Commerce Hub{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Formularzentrale</p>
+            <h1>Formulare</h1>
+            <p>Alle wichtigen Arbeitsmasken als klickbare Einstiege. Einige senden schon in echte Workflows, andere sind als Dummy vorbereitet.</p>
+        </div>
+        <div class="button-group">
+            <a class="button" href="{{ path('app_dashboard') }}">Zur Übersicht</a>
+            <a class="button button-primary" href="{{ path('app_product_new') }}">Produkt importieren</a>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Auswahl</h2>
+            <div class="stack">
+                {% for slug, form in forms %}
+                    <a class="mini-card link-card {{ slug == active_slug ? 'active-card' : '' }}" href="{{ path('app_form_hub_show', {slug: slug}) }}">
+                        <div class="row-between">
+                            <h3>{{ form.title }}</h3>
+                            <span class="badge">{{ form.badge }}</span>
+                        </div>
+                        <p>{{ form.body }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <form class="panel form-grid" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_token" value="{{ csrf_token('dummy_form_' ~ active_slug) }}">
+
+            <div class="form-group form-group-full">
+                <p class="eyebrow">{{ active_form.badge }}</p>
+                <h2>{{ active_form.title }}</h2>
+                <p>{{ active_form.body }}</p>
+            </div>
+
+            {% for field in active_form.fields %}
+                <div class="form-group {{ field.type == 'textarea' or field.type == 'file' ? 'form-group-full' : '' }}">
+                    <label for="{{ field.name }}">{{ field.label }}</label>
+
+                    {% if field.type == 'textarea' %}
+                        <textarea id="{{ field.name }}" name="{{ field.name }}" rows="{{ field.rows|default(4) }}">{{ field.value|default('') }}</textarea>
+                    {% elseif field.type == 'select' %}
+                        <select id="{{ field.name }}" name="{{ field.name }}">
+                            {% for option in field.options|default([]) %}
+                                <option>{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elseif field.type == 'file' %}
+                        <input id="{{ field.name }}" name="{{ field.name }}[]" type="file" multiple>
+                    {% else %}
+                        <input id="{{ field.name }}" name="{{ field.name }}" type="{{ field.type }}" value="{{ field.value|default('') }}">
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="form-group form-group-full">
+                <div class="button-group">
+                    <button class="button button-primary" type="submit">Dummy speichern</button>
+                    {% if active_form.real_link is defined %}
+                        <a class="button" href="{{ path(active_form.real_link.route) }}{% if active_form.real_link.fragment is defined %}#{{ active_form.real_link.fragment }}{% endif %}">
+                            {{ active_form.real_link.label }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}

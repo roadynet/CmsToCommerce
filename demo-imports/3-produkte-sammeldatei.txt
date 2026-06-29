@@ -1,0 +1,87 @@
+### Produkt 1.1
+Sectionscode: 1.1
+Titel: Edelstahl Trinkflasche 750 ml
+Marke: North Trail
+Produktart: Trinkflasche
+Kategorie: Outdoor/Trinkflaschen
+EAN: 4259001100011
+Material: Edelstahl
+Farbe: Schwarz
+Größe: 750 ml
+Abmessungen: 28 x 7 cm
+Gewicht: 320 g
+Kompatibilität: Alltag, Sport, Reisen
+Preis: 29,90
+
+Doppelwandige Edelstahl-Trinkflasche für heiße und kalte Getränke.
+Robuste Ausführung mit auslaufsicherem Verschluss für Alltag, Fitness und Outdoor.
+
+- Doppelwandige Isolierung
+- Auslaufsicherer Schraubverschluss
+- Robustes Edelstahlgehäuse
+- Wiederverwendbar und pflegeleicht
+
+Bilddateien:
+- 1.1.png
+- 1.1.1.png
+- 1.1.2.png
+
+---
+
+### Produkt 1.2
+Sectionscode: 1.2
+Titel: Bambus Schneidebrett mit Saftrille
+Marke: Casa Verde
+Produktart: Schneidebrett
+Kategorie: Küche/Schneidebretter
+EAN: 4259001100028
+Material: Bambus
+Farbe: Natur
+Größe: 38 x 26 cm
+Abmessungen: 38 x 26 x 1,8 cm
+Gewicht: 980 g
+Kompatibilität: Küche, Servieren, Grillen
+Preis: 24,90
+
+Massives Bambus-Schneidebrett mit umlaufender Saftrille.
+Geeignet zum Schneiden, Anrichten und Servieren von Lebensmitteln.
+
+- Mit umlaufender Saftrille
+- Massives Bambusmaterial
+- Auch als Servierbrett nutzbar
+- Pflegeleichte Oberfläche
+
+Bilddateien:
+- 1.2.png
+- 1.2.1.png
+- 1.2.2.png
+
+---
+
+### Produkt 1.3
+Sectionscode: 1.3
+Titel: LED Schreibtischlampe dimmbar USB-C
+Marke: Lumo Desk
+Produktart: Schreibtischlampe
+Kategorie: Wohnen/Beleuchtung/Schreibtischlampen
+EAN: 4259001100035
+Material: Aluminium, Kunststoff
+Farbe: Weiß
+Größe: 42 cm
+Abmessungen: 42 x 16 x 35 cm
+Gewicht: 1,2 kg
+Kompatibilität: Homeoffice, Büro, Lernen
+Preis: 59,90
+
+Moderne LED-Schreibtischlampe mit dimmbarem Licht und USB-C-Stromversorgung.
+Für konzentriertes Arbeiten, Lesen und einen aufgeräumten Arbeitsplatz.
+
+- Dimmbares LED-Licht
+- Schlankes Design für den Schreibtisch
+- USB-C-Stromversorgung
+- Für Büro und Homeoffice geeignet
+
+Bilddateien:
+- 1.3.png
+- 1.3.1.png
+- 1.3.2.png

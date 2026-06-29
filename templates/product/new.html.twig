@@ -1,0 +1,234 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produkt importieren · CMS to Commerce Hub{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Intake</p>
+            <h1>Produktimport</h1>
+            <p>Entweder ein einzelnes Produkt manuell erfassen oder mehrere Produkte per Sectionscode als Liste hochladen.</p>
+        </div>
+        <a class="button" href="{{ path('app_product_index') }}">Zurück zur Liste</a>
+    </section>
+
+    {% if section_errors %}
+        <section class="panel">
+            <h2>Bitte Sectionscode-Import prüfen</h2>
+            <ul class="simple-list">
+                {% for error in section_errors %}
+                    <li><span>{{ error }}</span></li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    <form id="sections-import" class="panel form-grid" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token('product_section_import') }}">
+        <input type="hidden" name="import_mode" value="sections">
+        {% if section_preview %}
+            <input type="hidden" name="preview_token" value="{{ section_preview.preview_token }}">
+        {% endif %}
+
+        <div class="form-group form-group-full">
+            <p class="eyebrow">Batch</p>
+            <h2>Listen-Import per Sectionscode</h2>
+            <p>Lade TXT-Dateien und Bilddateien getrennt hoch. Jede TXT-Datei erzeugt genau ein Produkt, und alle Dateien mit gleichem Sectionscode werden automatisch zugeordnet.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="section_cms_system">Quelle / Importname</label>
+            <input id="section_cms_system" name="section_cms_system" value="{{ section_form_data.cms_system }}">
+        </div>
+
+        <div class="form-group">
+            <label for="section_language_code">Standardsprache</label>
+            <input id="section_language_code" name="section_language_code" value="{{ section_form_data.language_code ?: 'de' }}">
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="section_category_path">Standard-Kategorie (optional)</label>
+            <input id="section_category_path" name="section_category_path" value="{{ section_form_data.category_path }}" placeholder="z. B. Haus & Garten > Beleuchtung">
+            <small>Wird nur als Fallback genutzt, wenn die TXT-Datei keine eigene Kategorie liefert.</small>
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="section_text_files">TXT-Dateien</label>
+            <input id="section_text_files" type="file" name="section_text_files[]" accept=".txt,text/plain" multiple>
+            <small>Wähle hier die Produkt-TXT-Dateien wie <code>1.1.txt</code>, <code>1.2.txt</code>, <code>1.3.txt</code>.</small>
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="section_asset_files">Bilder</label>
+            <input id="section_asset_files" type="file" name="section_asset_files[]" accept="image/*,.png,.jpg,.jpeg,.webp" multiple>
+            <small>Wähle hier die passenden Bilder wie <code>1.1.png</code>, <code>1.1.1.png</code>, <code>1.2.png</code> usw.</small>
+        </div>
+
+        <div class="form-group form-group-full">
+            <h3>Namensregel</h3>
+            <ul class="bullets">
+                <li><code>1.1.txt</code> enthält die Produktinfos für Produkt 1.1.</li>
+                <li><code>1.1.jpg</code>, <code>1.1.1.jpg</code>, <code>1.1.2.jpg</code> usw. gehören zu Produkt 1.1.</li>
+                <li><code>1.2.txt</code> ist das nächste Produkt mit seinen Dateien <code>1.2.jpg</code>, <code>1.2.1.jpg</code> usw.</li>
+            </ul>
+        </div>
+
+        <div class="button-group">
+            <button class="button button-primary" type="submit" name="section_action" value="preview">Dateien prüfen</button>
+        </div>
+    </form>
+
+    {% if section_preview %}
+        <section class="panel">
+            <p class="eyebrow">Vorschau</p>
+            <h2>Sectionscode-Import prüfen</h2>
+            <p>{{ section_preview.summary.produkt_anzahl }} Produkt(e), {{ section_preview.summary.txt_anzahl }} TXT-Datei(en), {{ section_preview.summary.bild_anzahl }} Bilddatei(en).</p>
+
+            {% if section_preview.warnings %}
+                <h3>Nicht zugeordnete Dateien</h3>
+                <ul class="simple-list">
+                    {% for warning in section_preview.warnings %}
+                        <li><span>{{ warning }}</span></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if section_preview.products %}
+                <div class="stack">
+                    {% for product in section_preview.products %}
+                        <article class="panel panel-nested">
+                            <h3>{{ product.produktname }}</h3>
+                            <ul class="simple-list">
+                                <li><span>Sectionscode: {{ product.sectionscode }}</span></li>
+                                <li><span>TXT-Datei: {{ product.textdatei }}</span></li>
+                                <li><span>Marke: {{ product.marke ?: '—' }}</span></li>
+                                <li><span>Produktart: {{ product.produktart ?: '—' }}</span></li>
+                                <li><span>Kategorie: {{ product.kategorie ?: '—' }}</span></li>
+                                <li><span>Bilder: {{ product.bild_anzahl }}</span></li>
+                            </ul>
+
+                            {% if product.bilddateien %}
+                                <h4>Bilddateien</h4>
+                                <ul class="bullets">
+                                    {% for image_name in product.bilddateien %}
+                                        <li><code>{{ image_name }}</code></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                            {% if product.fehlende_pflichtfelder %}
+                                <h4>Fehlende Pflichtfelder</h4>
+                                <ul class="bullets">
+                                    {% for field in product.fehlende_pflichtfelder %}
+                                        <li>{{ field }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                            {% if product.hinweise %}
+                                <h4>Hinweise</h4>
+                                <ul class="bullets">
+                                    {% for note in product.hinweise %}
+                                        <li>{{ note }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <form class="button-group" method="post">
+                    <input type="hidden" name="_token" value="{{ csrf_token('product_section_import') }}">
+                    <input type="hidden" name="import_mode" value="sections">
+                    <input type="hidden" name="section_action" value="import">
+                    <input type="hidden" name="preview_token" value="{{ section_preview.preview_token }}">
+                    <input type="hidden" name="section_cms_system" value="{{ section_form_data.cms_system }}">
+                    <input type="hidden" name="section_category_path" value="{{ section_form_data.category_path }}">
+                    <input type="hidden" name="section_language_code" value="{{ section_form_data.language_code }}">
+                    <button class="button button-primary" type="submit">Import jetzt starten</button>
+                </form>
+            {% else %}
+                <p>Es wurde noch kein importierbares Produkt erkannt. Bitte prüfe die Dateinamen und mindestens eine passende TXT-Datei.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+
+    {% if manual_errors %}
+        <section class="panel">
+            <h2>Bitte Einzelimport prüfen</h2>
+            <ul class="simple-list">
+                {% for error in manual_errors %}
+                    <li><span>{{ error }}</span></li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    <form id="manual-import" class="panel form-grid" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token('product_intake') }}">
+        <input type="hidden" name="import_mode" value="manual">
+
+        <div class="form-group form-group-full">
+            <p class="eyebrow">Einzeln</p>
+            <h2>Manueller Einzelimport</h2>
+            <p>Für Sonderfälle kannst du Produkte weiterhin einzeln mit Rohtext, Varianten und Bildern anlegen.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Produktname</label>
+            <input id="name" name="name" value="{{ manual_form_data.name }}">
+            <small>Optional, wenn der Rohtext schon einen klaren Titel enthält.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Marke</label>
+            <input id="brand" name="brand" value="{{ manual_form_data.brand }}">
+        </div>
+
+        <div class="form-group">
+            <label for="category_path">Kategorie</label>
+            <input id="category_path" name="category_path" value="{{ manual_form_data.category_path }}" placeholder="z. B. Haus & Garten > Beleuchtung">
+        </div>
+
+        <div class="form-group">
+            <label for="language_code">Sprache</label>
+            <input id="language_code" name="language_code" value="{{ manual_form_data.language_code ?: 'de' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="cms_system">CMS / Quelle</label>
+            <input id="cms_system" name="cms_system" value="{{ manual_form_data.cms_system }}" placeholder="z. B. Shopware, WordPress, PIM">
+        </div>
+
+        <div class="form-group">
+            <label for="external_reference">Externe Referenz</label>
+            <input id="external_reference" name="external_reference" value="{{ manual_form_data.external_reference }}" placeholder="z. B. Artikelnummer oder CMS-ID">
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="description">Manuelle Beschreibung</label>
+            <textarea id="description" name="description" rows="4">{{ manual_form_data.description }}</textarea>
+            <small>Optional. Wenn leer, wird aus dem Rohtext eine sichere Beschreibung abgeleitet.</small>
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="raw_text">Rohtext / Herstellertext / CMS-Export</label>
+            <textarea id="raw_text" name="raw_text" rows="10">{{ manual_form_data.raw_text }}</textarea>
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="variants_text">Varianten (optional)</label>
+            <textarea id="variants_text" name="variants_text" rows="6" placeholder='Beispiel Zeilenformat:&#10;SKU-ROT-M | Farbe=Rot | Größe=M | preis=29,90 | bestand=8&#10;&#10;Oder JSON: [{"sku":"SKU-SCHWARZ","optionen":{"Farbe":"Schwarz"}}]'>{{ manual_form_data.variants_text }}</textarea>
+        </div>
+
+        <div class="form-group form-group-full">
+            <label for="images">Bilder / Dateien</label>
+            <input id="images" type="file" name="images[]" multiple>
+            <small>Die Dateien werden serverseitig gespeichert und im Produkt als Asset hinterlegt.</small>
+        </div>
+
+        <div class="button-group">
+            <button class="button button-primary" type="submit">Produkt importieren</button>
+        </div>
+    </form>
+{% endblock %}

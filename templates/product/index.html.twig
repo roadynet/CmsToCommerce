@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produkte · CMS to Commerce Hub{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Produktstamm</p>
+            <h1>Produkte</h1>
+            <p>Hier landen CMS-Imports, manuelle Uploads und die daraus erzeugten Kanal-Entwürfe.</p>
+        </div>
+        <div class="button-group">
+            <a class="button" href="{{ path('app_dashboard') }}">Zur Übersicht</a>
+            <a class="button button-primary" href="{{ path('app_product_new') }}">Neues Produkt</a>
+        </div>
+    </section>
+
+    {% if database_warning %}
+        <div class="panel">
+            <h2>DB-Hinweis</h2>
+            <pre class="code-block">{{ database_warning }}</pre>
+        </div>
+    {% endif %}
+
+    <div class="stack">
+        {% for product in products %}
+            {% set panels = channel_overviews[product.id] ?? {} %}
+            {% set amazon = panels.amazon ?? null %}
+            {% set shopware = panels.shopware ?? null %}
+            <article class="panel">
+                <div class="row-between">
+                    <div>
+                        <h2><a class="text-link" href="{{ path('app_product_show', {id: product.id}) }}">{{ product.name }}</a></h2>
+                        <p>{{ product.brand ?: 'ohne Marke' }} · {{ product.categoryPath ?: 'Kategorie offen' }}</p>
+                    </div>
+                    <span class="badge">{{ product.status.label }}</span>
+                </div>
+
+                <p>{{ product.description ?: 'Noch keine Beschreibung vorhanden.' }}</p>
+
+                {% if amazon or shopware %}
+                    <div class="grid-2">
+                        {% if amazon %}
+                            <article class="mini-card integration-glance">
+                                <div class="row-between">
+                                    <h3>Amazon</h3>
+                                    <span class="badge {{ amazon.listing_badge_class }}">{{ amazon.listing ? amazon.listing.status.label : 'Entwurf' }}</span>
+                                </div>
+                                <p>
+                                    {% if amazon.external_id %}
+                                        ASIN {{ amazon.external_id }} ·
+                                    {% endif %}
+                                    {{ amazon.amazon_product_type ?: 'Product Type noch offen' }}
+                                </p>
+                                <p>
+                                    {% if amazon.listing and amazon.listing.lastSyncedAt %}
+                                        letzte Vorschau {{ amazon.listing.lastSyncedAt|date('d.m.Y H:i') }}
+                                    {% else %}
+                                        noch keine Amazon-Vorschau protokolliert
+                                    {% endif %}
+                                </p>
+                                <p>
+                                    {{ amazon.amazon_validation_status ?: 'noch keine Rückgabe' }}
+                                    {% if amazon.amazon_missing_attributes_amazon %}
+                                        · fehlt: {{ amazon.amazon_missing_attributes_amazon|join(', ') }}
+                                    {% endif %}
+                                </p>
+                            </article>
+                        {% endif %}
+
+                        {% if shopware %}
+                            <article class="mini-card integration-glance">
+                                <div class="row-between">
+                                    <h3>Shopware</h3>
+                                    <span class="badge {{ shopware.listing_badge_class }}">{{ shopware.listing ? shopware.listing.status.label : 'Entwurf' }}</span>
+                                </div>
+                                <p><code>{{ shopware.product_number }}</code></p>
+                                <p>
+                                    {% if shopware.external_id %}
+                                        ID {{ shopware.external_id }} ·
+                                    {% endif %}
+                                    {% if shopware.listing and shopware.listing.lastSyncedAt %}
+                                        letzter Sync {{ shopware.listing.lastSyncedAt|date('d.m.Y H:i') }}
+                                    {% else %}
+                                        noch kein Live-Sync protokolliert
+                                    {% endif %}
+                                </p>
+                                <div class="button-group">
+                                    {% if shopware.admin_url %}
+                                        <a class="button" href="{{ shopware.admin_url }}" target="_blank" rel="noreferrer noopener">Shopware Admin</a>
+                                    {% endif %}
+                                    {% if shopware.storefront_search_url %}
+                                        <a class="button" href="{{ shopware.storefront_search_url }}" target="_blank" rel="noreferrer noopener">Im Shop suchen</a>
+                                    {% endif %}
+                                </div>
+                            </article>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <div class="button-group">
+                    <a class="button" href="{{ path('app_product_show', {id: product.id}) }}">Öffnen</a>
+                    <a class="button" href="{{ path('app_product_edit', {id: product.id}) }}">Bearbeiten</a>
+                    <form class="inline-form" method="post" action="{{ path('app_product_delete', {id: product.id}) }}" onsubmit="return confirm('Produkt wirklich löschen?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('product_delete_' ~ product.id) }}">
+                        <button class="button button-danger" type="submit">Löschen</button>
+                    </form>
+                </div>
+            </article>
+        {% else %}
+            <div class="panel">
+                <p>Noch keine Produkte vorhanden.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

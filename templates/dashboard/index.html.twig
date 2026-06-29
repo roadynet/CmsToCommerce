@@ -1,0 +1,295 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ overview.title }}{% endblock %}
+
+{% block body %}
+    <section class="hero">
+        <div>
+            <p class="eyebrow">CMS to Commerce</p>
+            <h1>{{ overview.title }}</h1>
+            <p class="hero-copy">
+                Übernimm Produktdaten aus TXT, Bildern oder API-Calls, prüfe die Qualität
+                und synchronisiere daraus marktplatzfähige Produktseiten für Amazon und Shopware.
+            </p>
+        </div>
+        <div class="hero-actions">
+            <a class="button button-primary" href="{{ path('app_form_hub_index') }}">Formulare oeffnen</a>
+            <a class="button" href="{{ path('app_product_new') }}#sections-import">Batch-Import starten</a>
+            <a class="button" href="{{ path('app_product_new') }}#manual-import">Einzelimport öffnen</a>
+            <a class="button" href="{{ path('app_product_index') }}">Produktstamm öffnen</a>
+        </div>
+    </section>
+
+    <section class="panel dashboard-panel">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Schnellstart</p>
+                <h2>Sofort loslegen</h2>
+            </div>
+            <p class="section-copy">Direkte Einstiege zu den Formularen – inklusive Dummy-Daten für deinen ersten Testlauf.</p>
+        </div>
+
+        <div class="quick-grid">
+            {% for card in overview.quick_starts %}
+                <article class="mini-card action-card">
+                    <span class="badge">{{ card.badge }}</span>
+                    <h3>{{ card.title }}</h3>
+                    <p>{{ card.body }}</p>
+                    <pre class="code-block">{{ card.sample }}</pre>
+
+                    <div class="button-group">
+                        {% if card.action == 'sections' %}
+                            <a class="button button-primary" href="{{ path('app_product_new') }}#sections-import">Zum Batch-Formular</a>
+                        {% elseif card.action == 'manual' %}
+                            <a class="button button-primary" href="{{ path('app_product_new') }}#manual-import">Zum Einzelimport</a>
+                        {% elseif card.action == 'products' %}
+                            <a class="button button-primary" href="{{ path('app_product_index') }}">Produktstamm öffnen</a>
+                        {% elseif card.action == 'api' %}
+                            <a class="button button-primary" href="#api-intake">API-Beispiel ansehen</a>
+                        {% endif %}
+
+                        {% if card.download_url %}
+                            <a class="button" href="{{ card.download_url }}" download>{{ card.download_label }}</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span class="stat-label">Produkte</span>
+            <strong>{{ overview.stats.products }}</strong>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">Produktseiten</span>
+            <strong>{{ overview.stats.listings }}</strong>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">Publikationen</span>
+            <strong>{{ overview.stats.publication_runs }}</strong>
+        </article>
+    </section>
+
+    {% if not overview.database_ready %}
+        <section class="panel">
+            <h2>Datenbank noch nicht bereit</h2>
+            <p>Die Oberfläche ist geladen, aber Doctrine konnte noch nicht stabil auf die Datenbank zugreifen.</p>
+            {% if overview.database_message %}
+                <pre class="code-block">{{ overview.database_message }}</pre>
+            {% endif %}
+        </section>
+    {% endif %}
+
+    <section class="panel dashboard-panel">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Workflow</p>
+                <h2>So läuft der Produktweg</h2>
+            </div>
+            <p class="section-copy">Vom Dateneingang bis zur synchronisierten Produktseite in drei klaren Schritten.</p>
+        </div>
+
+        <div class="workflow-grid">
+            {% for step in overview.workflow_steps %}
+                <article class="mini-card workflow-card">
+                    <span class="workflow-step">{{ step.step }}</span>
+                    <h3>{{ step.title }}</h3>
+                    <p>{{ step.body }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Was die Plattform jetzt kann</h2>
+            <div class="stack">
+                {% for capability in overview.capabilities %}
+                    <article class="mini-card">
+                        <h3>{{ capability.title }}</h3>
+                        <p>{{ capability.body }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Architektur & Leitplanken</h2>
+            <div class="stack">
+                {% for principle in overview.principles %}
+                    <article class="mini-card">
+                        <h3>{{ principle.title }}</h3>
+                        <p>{{ principle.body }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Integrationen</h2>
+            <div class="stack">
+                {% for integration in overview.integrations %}
+                    <article class="mini-card">
+                        <div class="row-between">
+                            <h3>{{ integration.title }}</h3>
+                            <span class="badge {{ integration.ready ? 'badge-success' : 'badge-warning' }}">
+                                {{ integration.ready ? 'aktiv' : 'offen' }}
+                            </span>
+                        </div>
+                        <p>{{ integration.body }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Warenwirtschaft / PIM Intake</h2>
+            <div class="stack">
+                {% for system in overview.source_systems %}
+                    <article class="mini-card">
+                        <div class="row-between">
+                            <h3>{{ system.label }}</h3>
+                            <span class="badge {{ system.intake_ready ? 'badge-success' : 'badge-warning' }}">{{ system.status }}</span>
+                        </div>
+                        <p>{{ system.summary }}</p>
+                        <p><strong>Nächster Schritt:</strong> {{ system.next_step }}</p>
+                        <p><strong>Beispiel-Felder:</strong> {{ system.example_keys|join(', ') }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel" id="api-intake">
+            <h2>API / Schnittstellen</h2>
+            <div class="stack">
+                {% for example in overview.api_examples %}
+                    <article class="mini-card">
+                        <h3>{{ example.title }}</h3>
+                        <p>{{ example.body }}</p>
+                    </article>
+                {% endfor %}
+
+                <article class="mini-card">
+                    <h3>Dummy-Request für den ersten Test</h3>
+                    <pre class="code-block">POST {{ app.request.schemeAndHttpHost ~ path('app_api_product_intake') }}
+X-CTC-Token: dein-token
+X-CTC-Source-System: jtl
+Content-Type: application/json
+
+{
+  "article": {
+    "id": "4711",
+    "name": "Edelstahl Trinkflasche 750 ml",
+    "manufacturerName": "North Trail",
+    "categoryPath": "Outdoor/Trinkflaschen",
+    "description": "Doppelwandige Edelstahl-Trinkflasche für Alltag, Sport und Reisen."
+  },
+  "images": [
+    {
+      "url": "https://example.com/images/flasche-front.png",
+      "name": "flasche-front.png",
+      "alt": "Frontansicht"
+    }
+  ],
+  "variants": [
+    {
+      "sku": "NT-750-BLK",
+      "ean": "4259001100011",
+      "priceGross": "29.90",
+      "stock": 24,
+      "options": {
+        "Farbe": "Schwarz",
+        "Größe": "750 ml"
+      }
+    }
+  ]
+}</pre>
+                </article>
+            </div>
+        </div>
+        <div class="panel">
+            <h2>Warum das wichtig ist</h2>
+            <div class="stack">
+                <article class="mini-card">
+                    <h3>Ein Intake, mehrere Quellen</h3>
+                    <p>CTC muss für neue Systeme nicht jedes Mal neu lernen, wie ein Produkt intern aussieht. Das Mapping passiert jetzt vor dem Produktimport.</p>
+                </article>
+                <article class="mini-card">
+                    <h3>Saubere Ausbau-Reihenfolge</h3>
+                    <p>Jetzt sind Mapping, Medienabruf und Delta-Sync da. Als nächster sinnvoller Schritt folgen zeitgesteuerte Läufe oder echtes Write-back pro System.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Status nach Produktstatus</h2>
+            <ul class="simple-list">
+                {% for status, total in overview.stats.product_statuses %}
+                    <li><span>{{ status }}</span><strong>{{ total }}</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="panel">
+            <h2>Kanal-Abdeckung</h2>
+            <ul class="simple-list">
+                {% for channel, total in overview.channels %}
+                    <li><span>{{ channel }}</span><strong>{{ total }}</strong></li>
+                {% else %}
+                    <li><span>Noch keine Kanal-Entwürfe</span><strong>0</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <div class="row-between">
+                <h2>Neueste Produkte</h2>
+                <a class="button" href="{{ path('app_product_index') }}">Alle Produkte</a>
+            </div>
+
+            <div class="stack">
+                {% for product in overview.recentProducts %}
+                    <a class="mini-card link-card" href="{{ path('app_product_show', {id: product.id}) }}">
+                        <div class="row-between">
+                            <h3>{{ product.name }}</h3>
+                            <span class="badge">{{ product.status.label }}</span>
+                        </div>
+                        <p>{{ product.brand ?: 'ohne Marke' }} · {{ product.categoryPath ?: 'Kategorie offen' }}</p>
+                    </a>
+                {% else %}
+                    <article class="mini-card">
+                        <h3>Noch keine Produkte</h3>
+                        <p>Starte mit dem Sectionscode-Testpaket oder lege dein erstes Produkt per Einzelimport an.</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Neueste Veröffentlichungs- und Sync-Läufe</h2>
+            <div class="stack">
+                {% for run in overview.recentRuns %}
+                    <article class="mini-card">
+                        <h3>{{ run.channel.label }} · {{ run.actionLabel }}</h3>
+                        <p>{{ run.status.label }}{% if run.summary %} — {{ run.summary }}{% endif %}</p>
+                    </article>
+                {% else %}
+                    <article class="mini-card">
+                        <h3>Noch keine Sync-Läufe</h3>
+                        <p>Sobald Produkte vorbereitet oder veröffentlicht werden, erscheint hier die technische Historie.</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

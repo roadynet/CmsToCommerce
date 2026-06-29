@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+# See also https://symfony.com/doc/current/service_container/import.html
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    app.media_storage_path: '%kernel.project_dir%/var/product-media'
+    app.import_preview_path: '%kernel.project_dir%/var/import-previews'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            string $mediaStoragePath: '%app.media_storage_path%'
+            string $importPreviewPath: '%app.import_preview_path%'
+            string $platformName: '%env(APP_PLATFORM_NAME)%'
+            string $defaultContentLanguage: '%env(CMS_DEFAULT_LANGUAGE)%'
+            string $appExternalSecretsFile: '%env(APP_EXTERNAL_SECRETS_FILE)%'
+            string $importApiToken: '%env(APP_IMPORT_API_TOKEN)%'
+            string $shopwareBaseUrl: '%env(SHOPWARE_BASE_URL)%'
+            string $shopwareAdminBaseUrl: '%env(SHOPWARE_ADMIN_BASE_URL)%'
+            string $shopwareAdminUsername: '%env(SHOPWARE_ADMIN_USERNAME)%'
+            string $shopwareAdminPassword: '%env(SHOPWARE_ADMIN_PASSWORD)%'
+            string $shopwareSyncCategory: '%env(SHOPWARE_SYNC_CATEGORY)%'
+            string $amazonRegion: '%env(AMAZON_REGION)%'
+            string $amazonSellerId: '%env(AMAZON_SELLER_ID)%'
+            string $amazonMarketplaceId: '%env(AMAZON_MARKETPLACE_ID)%'
+            string $amazonAppId: '%env(AMAZON_APP_ID)%'
+            string $amazonClientSecret: '%env(AMAZON_CLIENT_SECRET)%'
+            string $amazonRefreshToken: '%env(AMAZON_REFRESH_TOKEN)%'
+            bool $amazonEnableLivePublish: '%env(bool:AMAZON_ENABLE_LIVE_PUBLISH)%'
+            string $jtlApiBaseUrl: '%env(JTL_API_BASE_URL)%'
+            string $jtlAuthBaseUrl: '%env(JTL_AUTH_BASE_URL)%'
+            string $jtlTenantId: '%env(JTL_TENANT_ID)%'
+            string $jtlClientId: '%env(JTL_CLIENT_ID)%'
+            string $jtlClientSecret: '%env(JTL_CLIENT_SECRET)%'
+            bool $jtlEnableLiveWriteback: '%env(bool:JTL_ENABLE_LIVE_WRITEBACK)%'
+            string $jtlRunAs: '%env(JTL_RUNAS)%'
+            string $jtlCompanyId: '%env(JTL_COMPANY_ID)%'
+            string $plentyBaseUrl: '%env(PLENTY_BASE_URL)%'
+            string $plentyUsername: '%env(PLENTY_USERNAME)%'
+            string $plentyPassword: '%env(PLENTY_PASSWORD)%'
+            string $plentyDefaultLang: '%env(PLENTY_DEFAULT_LANG)%'
+            bool $plentyEnableLiveWriteback: '%env(bool:PLENTY_ENABLE_LIVE_WRITEBACK)%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
