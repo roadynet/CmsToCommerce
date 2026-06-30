@@ -11,6 +11,7 @@ enum ExternalSystemType: string
     case Plentymarkets = 'plentymarkets';
     case Xentral = 'xentral';
     case SapR3 = 'sap_r3';
+    case Pimcore = 'pimcore';
 
     public function label(): string
     {
@@ -20,6 +21,7 @@ enum ExternalSystemType: string
             self::Plentymarkets => 'plentymarkets',
             self::Xentral => 'Xentral',
             self::SapR3 => 'SAP R/3',
+            self::Pimcore => 'Pimcore',
         };
     }
 }

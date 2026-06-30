@@ -8,6 +8,7 @@ use App\Dto\ExternalWritebackResult;
 use App\Entity\Product;
 use App\Enum\ExternalSystemType;
 use App\Integration\Jtl\JtlErpApiConnector;
+use App\Integration\Pimcore\PimcoreApiConnector;
 use App\Integration\Plentymarkets\PlentymarketsRestApiConnector;
 use App\Integration\SapR3\SapR3GatewayConnector;
 
@@ -22,12 +23,14 @@ final class ExternalSystemWritebackPublisherRegistry
         JtlErpApiConnector $jtlErpApiConnector,
         PlentymarketsRestApiConnector $plentymarketsRestApiConnector,
         SapR3GatewayConnector $sapR3GatewayConnector,
+        PimcoreApiConnector $pimcoreApiConnector,
     )
     {
         foreach ([
             $jtlErpApiConnector,
             $plentymarketsRestApiConnector,
             $sapR3GatewayConnector,
+            $pimcoreApiConnector,
         ] as $publisher) {
             $this->publishers[$publisher->system()->value] = $publisher;
         }

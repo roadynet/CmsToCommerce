@@ -12,6 +12,7 @@ use App\Service\Export\ListingDataTranslator;
 use App\Service\Import\ProductTextNormalizer;
 use App\Service\Integration\ExternalSystemWritebackPreviewRegistry;
 use App\Service\Integration\JtlWritebackPreviewBuilder;
+use App\Service\Integration\PimcoreWritebackPreviewBuilder;
 use App\Service\Integration\PlentymarketsWritebackPreviewBuilder;
 use App\Service\Integration\SapR3WritebackPreviewBuilder;
 use App\Service\Integration\XentralWritebackPreviewBuilder;
@@ -30,6 +31,7 @@ final class ExternalSystemWritebackPreviewRegistryTest extends TestCase
             new PlentymarketsWritebackPreviewBuilder($draftBuilder, $translator),
             new XentralWritebackPreviewBuilder($draftBuilder, $translator),
             new SapR3WritebackPreviewBuilder($draftBuilder, $translator),
+            new PimcoreWritebackPreviewBuilder($draftBuilder, $translator),
         );
     }
 
@@ -74,5 +76,27 @@ final class ExternalSystemWritebackPreviewRegistryTest extends TestCase
         self::assertSame('000000000000471100', $preview['payload']['idoc']['segments']['E1MARAM']['MATNR']);
         self::assertSame('BAPI_MATERIAL_SAVEDATA', $preview['payload']['bapi']['name']);
         self::assertArrayHasKey('ZCTC_LISTING_TEXT', $preview['payload']['idoc']['segments']);
+    }
+
+    public function testBuildsPimcoreWritebackPreview(): void
+    {
+        $product = (new Product('Edelstahl Trinkflasche 750 ml'))
+            ->setBrand('North Trail')
+            ->setCategoryPath('Outdoor/Trinkflaschen')
+            ->setDescription('Doppelwandige Edelstahl-Trinkflasche.');
+        $product->addSource(
+            (new ProductSource(
+                SourceType::CmsImport,
+                '{"object":{"id":471100,"key":"edelstahl-trinkflasche","className":"Product"}}'
+            ))->setCmsSystem('pimcore')->setExternalReference('471100')->setLanguageCode('de')
+        );
+
+        $preview = $this->registry()->build($product, ExternalSystemType::Pimcore);
+
+        self::assertSame('pimcore', $preview['system']);
+        self::assertSame('471100', $preview['payload']['object']['id']);
+        self::assertSame('Product', $preview['payload']['object']['className']);
+        self::assertArrayHasKey('ctcOptimizedTitle', $preview['payload']['data']);
+        self::assertArrayHasKey('de', $preview['payload']['localizedfields']);
     }
 }

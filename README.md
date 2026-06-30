@@ -12,7 +12,7 @@ Symfony-Plattform für einen geschützten Produkt-Workflow von CMS-/Dateiimport 
 - Amazon-A-Listing-Drafts mit Qualitätsprüfung
 - Shopware Admin API inklusive Produkt- und Medienzuordnung
 - vorbereitete Amazon-SP-API-Anbindung ohne Live-Testzwang
-- JTL-, plentymarkets-, Xentral- und SAP-R/3-Vorbereitung mit Sync-/Write-back-Flows
+- JTL-, plentymarkets-, Xentral-, SAP-R/3- und Pimcore-Vorbereitung mit Sync-/Write-back-Flows
 - zeitgesteuerte externe Sync-Jobs
 - Export-Vorschau als JSON pro Channel
 
@@ -46,6 +46,7 @@ Wichtige Variablen:
 - `JTL_*`
 - `PLENTY_*`
 - `SAP_R3_*`
+- `PIMCORE_*`
 
 Beispiele liegen in:
 

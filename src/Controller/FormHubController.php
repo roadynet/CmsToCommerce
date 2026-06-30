@@ -144,14 +144,25 @@ final class FormHubController extends AbstractController
                     ['name' => 'felder', 'label' => 'Felder', 'type' => 'textarea', 'rows' => 5, 'value' => "MAKTX Kurztext\nZCTC Titel\nZCTC Bulletpoints\nZCTC Langtext\nZCTC Keywords"],
                 ],
             ],
+            'pimcore-writeback' => [
+                'badge' => 'Pimcore',
+                'title' => 'Pimcore Write-back',
+                'body' => 'Dummy-Maske fuer Rueckschreiben optimierter CTC-Texte in Pimcore Data Objects inklusive localized fields und Workflow-Status.',
+                'fields' => [
+                    ['name' => 'object_id', 'label' => 'Pimcore Objekt-ID', 'type' => 'text', 'value' => '471100'],
+                    ['name' => 'class_name', 'label' => 'Klasse', 'type' => 'text', 'value' => 'Product'],
+                    ['name' => 'sprache', 'label' => 'Sprache', 'type' => 'text', 'value' => 'de'],
+                    ['name' => 'felder', 'label' => 'Felder', 'type' => 'textarea', 'rows' => 5, 'value' => "ctcOptimizedTitle\nctcShortDescription\nctcDescription\nctcBulletpoints\nctcKeywords\nctcQualityScore"],
+                ],
+            ],
             'sync-job' => [
                 'badge' => 'Automation',
                 'title' => 'Zeitgesteuerter Sync-Job',
-                'body' => 'Dummy-Maske fuer Upsert- und Delta-Laeufe aus JTL, plentymarkets, Xentral oder SAP R/3.',
+                'body' => 'Dummy-Maske fuer Upsert- und Delta-Laeufe aus JTL, plentymarkets, Xentral, SAP R/3 oder Pimcore.',
                 'real_link' => ['label' => 'Echte Sync-Jobs oeffnen', 'route' => 'app_sync_job_index'],
                 'fields' => [
                     ['name' => 'jobname', 'label' => 'Jobname', 'type' => 'text', 'value' => 'JTL Delta Bestand und Preis'],
-                    ['name' => 'system', 'label' => 'System', 'type' => 'select', 'options' => ['JTL', 'plentymarkets', 'Xentral', 'SAP R/3']],
+                    ['name' => 'system', 'label' => 'System', 'type' => 'select', 'options' => ['JTL', 'plentymarkets', 'Xentral', 'SAP R/3', 'Pimcore']],
                     ['name' => 'modus', 'label' => 'Modus', 'type' => 'select', 'options' => ['Delta', 'Upsert']],
                     ['name' => 'intervall', 'label' => 'Intervall Minuten', 'type' => 'number', 'value' => '60'],
                 ],

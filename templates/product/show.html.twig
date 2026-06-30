@@ -246,6 +246,11 @@
                                     <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_sap_r3') }}">
                                     <button class="button button-primary" type="submit">SAP R/3 live senden</button>
                                 </form>
+                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'pimcore'}) }}">Pimcore Preview</a>
+                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'pimcore'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an Pimcore senden?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_pimcore') }}">
+                                    <button class="button button-primary" type="submit">Pimcore live senden</button>
+                                </form>
                             </div>
                         {% endif %}
                     </article>

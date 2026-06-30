@@ -18,6 +18,7 @@ final class ExternalSystemIntakeRegistry
         PlentymarketsPayloadNormalizer $plentymarketsPayloadNormalizer,
         XentralPayloadNormalizer $xentralPayloadNormalizer,
         SapR3PayloadNormalizer $sapR3PayloadNormalizer,
+        PimcorePayloadNormalizer $pimcorePayloadNormalizer,
         GenericPayloadNormalizer $genericPayloadNormalizer,
     ) {
         $this->normalizers = [
@@ -25,6 +26,7 @@ final class ExternalSystemIntakeRegistry
             $plentymarketsPayloadNormalizer,
             $xentralPayloadNormalizer,
             $sapR3PayloadNormalizer,
+            $pimcorePayloadNormalizer,
             $genericPayloadNormalizer,
         ];
     }

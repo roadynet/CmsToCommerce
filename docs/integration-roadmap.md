@@ -119,6 +119,30 @@ Aktueller CTC-Stand:
 - Live-Write-back ist als Gateway-Proxy vorbereitet
 - Sicherheitsmodus: Live-Senden bleibt aus, bis `SAP_R3_ENABLE_LIVE_WRITEBACK=1` gesetzt ist
 
+### 5. Pimcore
+
+Warum als PIM/DAM-Adapter:
+
+- starke Quelle für strukturierte Produktdaten, Klassifizierungen, Varianten und digitale Assets
+- passt sehr gut vor CTC, wenn Produktdaten redaktionell gepflegt und danach für Amazon/Shopware optimiert werden
+- eignet sich als Rückkanal für optimierte Listing-Texte, Qualitätsstatus und kanalbezogene Freigaben
+
+Empfohlene Adapter-Reihenfolge:
+
+1. Data Objects und localized fields lesen
+2. Assets/Galerien als Bildquellen übernehmen
+3. Classification Store / Attribute / Varianten normalisieren
+4. Delta-Sync für Preis, Bestand und Status ergänzen
+5. Write-back-Preview für optimierte CTC-Texte erzeugen
+6. Live-Write-back erst über freigegebenen Pimcore API-/Data-Hub-/Gateway-Endpunkt aktivieren
+
+Aktueller CTC-Stand:
+
+- Pimcore-Intake ist für Objekt-ID, Klasse, Key, localized fields, Attribute, Varianten und Assets vorbereitet
+- Preview-Write-back erzeugt objektnahe Felder wie `ctcOptimizedTitle`, `ctcDescription`, `ctcBulletpoints`, `ctcKeywords` und Qualitätswerte
+- Live-Write-back ist über einen Pimcore-Gateway-Endpunkt vorbereitet
+- Sicherheitsmodus: Live-Senden bleibt aus, bis `PIMCORE_ENABLE_LIVE_WRITEBACK=1` gesetzt ist
+
 ## Technische Integrationslogik in CTC
 
 Unabhängig vom Zielsystem sollte jeder neue Connector in derselben Reihenfolge wachsen:

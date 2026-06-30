@@ -7,6 +7,7 @@ namespace App\Tests\Service\Integration;
 use App\Service\Integration\ExternalSystemIntakeRegistry;
 use App\Service\Integration\GenericPayloadNormalizer;
 use App\Service\Integration\JtlPayloadNormalizer;
+use App\Service\Integration\PimcorePayloadNormalizer;
 use App\Service\Integration\PlentymarketsPayloadNormalizer;
 use App\Service\Integration\SapR3PayloadNormalizer;
 use App\Service\Integration\XentralPayloadNormalizer;
@@ -21,6 +22,7 @@ final class ExternalSystemIntakeRegistryTest extends TestCase
             new PlentymarketsPayloadNormalizer(),
             new XentralPayloadNormalizer(),
             new SapR3PayloadNormalizer(),
+            new PimcorePayloadNormalizer(),
             new GenericPayloadNormalizer(),
         );
     }
@@ -157,6 +159,52 @@ final class ExternalSystemIntakeRegistryTest extends TestCase
         self::assertSame('29.90', $normalized['variants'][0]['price']);
         self::assertSame(24, $normalized['variants'][0]['stock']);
         self::assertSame('flasche.jpg', $normalized['asset_urls'][0]['name']);
+    }
+
+    public function testNormalizesPimcorePayload(): void
+    {
+        $normalized = $this->registry()->normalize([
+            'object' => [
+                'id' => 471100,
+                'key' => 'edelstahl-trinkflasche',
+                'className' => 'Product',
+                'data' => [
+                    'localizedfields' => [
+                        'de' => [
+                            'name' => 'Edelstahl Trinkflasche 750 ml',
+                            'description' => 'Doppelwandige Trinkflasche aus Edelstahl.',
+                        ],
+                    ],
+                    'brand' => ['name' => 'North Trail'],
+                    'categories' => [
+                        ['name' => 'Outdoor'],
+                        ['name' => 'Trinkflaschen'],
+                    ],
+                    'attributes' => [
+                        'Material' => 'Edelstahl',
+                        'Farbe' => 'Schwarz',
+                    ],
+                    'variants' => [[
+                        'sku' => 'NT-750-BLK',
+                        'ean' => '4259001100011',
+                        'price' => '29.90',
+                        'stock' => 24,
+                    ]],
+                    'assets' => [[
+                        'url' => 'https://pimcore.example/assets/flasche-front.jpg',
+                        'filename' => 'flasche-front.jpg',
+                    ]],
+                ],
+            ],
+        ], 'pimcore');
+
+        self::assertSame('pimcore', $normalized['_ctc_system_code']);
+        self::assertSame('Edelstahl Trinkflasche 750 ml', $normalized['produkt_name']);
+        self::assertSame('North Trail', $normalized['marke']);
+        self::assertSame('Outdoor/Trinkflaschen', $normalized['kategorie_pfad']);
+        self::assertSame('471100', $normalized['external_reference']);
+        self::assertSame('NT-750-BLK', $normalized['variants'][0]['sku']);
+        self::assertSame('flasche-front.jpg', $normalized['asset_urls'][0]['name']);
     }
 
     public function testFallsBackToGenericPayload(): void

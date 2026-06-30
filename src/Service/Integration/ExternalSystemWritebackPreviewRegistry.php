@@ -19,12 +19,14 @@ final class ExternalSystemWritebackPreviewRegistry
         PlentymarketsWritebackPreviewBuilder $plentymarketsWritebackPreviewBuilder,
         XentralWritebackPreviewBuilder $xentralWritebackPreviewBuilder,
         SapR3WritebackPreviewBuilder $sapR3WritebackPreviewBuilder,
+        PimcoreWritebackPreviewBuilder $pimcoreWritebackPreviewBuilder,
     ) {
         foreach ([
             $jtlWritebackPreviewBuilder,
             $plentymarketsWritebackPreviewBuilder,
             $xentralWritebackPreviewBuilder,
             $sapR3WritebackPreviewBuilder,
+            $pimcoreWritebackPreviewBuilder,
         ] as $builder) {
             $this->builders[$builder->system()->value] = $builder;
         }

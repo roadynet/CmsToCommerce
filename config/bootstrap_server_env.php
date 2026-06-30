@@ -26,6 +26,7 @@ $candidateFiles = array_values(array_filter([
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-jtl.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-plentymarkets.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-sap-r3.env',
+    $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-pimcore.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'skillbuilder-shopware.env',
 ]));
 
@@ -148,7 +149,7 @@ function ctc_is_relevant_runtime_secret_key(string $name): bool
         return true;
     }
 
-    foreach (['SHOPWARE_', 'AMAZON_', 'JTL_', 'PLENTY_', 'XENTRAL_', 'SAP_R3_', 'SAP_'] as $prefix) {
+    foreach (['SHOPWARE_', 'AMAZON_', 'JTL_', 'PLENTY_', 'XENTRAL_', 'SAP_R3_', 'SAP_', 'PIMCORE_'] as $prefix) {
         if (str_starts_with($name, $prefix)) {
             return true;
         }

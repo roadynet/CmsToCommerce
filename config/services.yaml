@@ -55,6 +55,11 @@ services:
             string $sapR3SystemId: '%env(SAP_R3_SYSTEM_ID)%'
             string $sapR3Language: '%env(SAP_R3_LANGUAGE)%'
             bool $sapR3EnableLiveWriteback: '%env(bool:SAP_R3_ENABLE_LIVE_WRITEBACK)%'
+            string $pimcoreBaseUrl: '%env(PIMCORE_BASE_URL)%'
+            string $pimcoreApiToken: '%env(PIMCORE_API_TOKEN)%'
+            string $pimcoreWritebackPath: '%env(PIMCORE_WRITEBACK_PATH)%'
+            string $pimcoreDefaultLanguage: '%env(PIMCORE_DEFAULT_LANGUAGE)%'
+            bool $pimcoreEnableLiveWriteback: '%env(bool:PIMCORE_ENABLE_LIVE_WRITEBACK)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
