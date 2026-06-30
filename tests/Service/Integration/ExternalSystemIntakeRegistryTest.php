@@ -10,6 +10,7 @@ use App\Service\Integration\JtlPayloadNormalizer;
 use App\Service\Integration\PimcorePayloadNormalizer;
 use App\Service\Integration\PlentymarketsPayloadNormalizer;
 use App\Service\Integration\SapR3PayloadNormalizer;
+use App\Service\Integration\ShopifyPayloadNormalizer;
 use App\Service\Integration\XentralPayloadNormalizer;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,7 @@ final class ExternalSystemIntakeRegistryTest extends TestCase
             new XentralPayloadNormalizer(),
             new SapR3PayloadNormalizer(),
             new PimcorePayloadNormalizer(),
+            new ShopifyPayloadNormalizer(),
             new GenericPayloadNormalizer(),
         );
     }
@@ -205,6 +207,42 @@ final class ExternalSystemIntakeRegistryTest extends TestCase
         self::assertSame('471100', $normalized['external_reference']);
         self::assertSame('NT-750-BLK', $normalized['variants'][0]['sku']);
         self::assertSame('flasche-front.jpg', $normalized['asset_urls'][0]['name']);
+    }
+
+    public function testNormalizesShopifyPayload(): void
+    {
+        $normalized = $this->registry()->normalize([
+            'product' => [
+                'id' => 471100,
+                'admin_graphql_api_id' => 'gid://shopify/Product/471100',
+                'title' => 'Edelstahl Trinkflasche 750 ml',
+                'vendor' => 'North Trail',
+                'product_type' => 'Outdoor/Trinkflaschen',
+                'body_html' => '<p>Doppelwandige Trinkflasche aus Edelstahl.</p>',
+                'tags' => 'outdoor, trinkflasche',
+                'variants' => [[
+                    'id' => 991,
+                    'sku' => 'NT-750-BLK',
+                    'barcode' => '4259001100011',
+                    'price' => '29.90',
+                    'inventory_quantity' => 24,
+                    'option1' => 'Schwarz',
+                ]],
+                'images' => [[
+                    'src' => 'https://cdn.shopify.com/s/files/flasche-front.jpg',
+                    'alt' => 'Frontansicht',
+                ]],
+            ],
+        ], 'shopify');
+
+        self::assertSame('shopify', $normalized['_ctc_system_code']);
+        self::assertSame('Edelstahl Trinkflasche 750 ml', $normalized['produkt_name']);
+        self::assertSame('North Trail', $normalized['marke']);
+        self::assertSame('Outdoor/Trinkflaschen', $normalized['kategorie_pfad']);
+        self::assertSame('gid://shopify/Product/471100', $normalized['external_reference']);
+        self::assertSame('NT-750-BLK', $normalized['variants'][0]['sku']);
+        self::assertSame('4259001100011', $normalized['variants'][0]['ean']);
+        self::assertSame('https://cdn.shopify.com/s/files/flasche-front.jpg', $normalized['asset_urls'][0]['url']);
     }
 
     public function testFallsBackToGenericPayload(): void

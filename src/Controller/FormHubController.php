@@ -155,14 +155,25 @@ final class FormHubController extends AbstractController
                     ['name' => 'felder', 'label' => 'Felder', 'type' => 'textarea', 'rows' => 5, 'value' => "ctcOptimizedTitle\nctcShortDescription\nctcDescription\nctcBulletpoints\nctcKeywords\nctcQualityScore"],
                 ],
             ],
+            'shopify-writeback' => [
+                'badge' => 'Shopify',
+                'title' => 'Shopify Write-back',
+                'body' => 'Dummy-Maske fuer Rueckschreiben optimierter CTC-Texte in Shopify Produkte per Admin GraphQL API.',
+                'fields' => [
+                    ['name' => 'product_gid', 'label' => 'Shopify Product GID', 'type' => 'text', 'value' => 'gid://shopify/Product/471100'],
+                    ['name' => 'shop_domain', 'label' => 'Shop Domain', 'type' => 'text', 'value' => 'ctc-demo.myshopify.com'],
+                    ['name' => 'api_version', 'label' => 'Admin API Version', 'type' => 'text', 'value' => '2026-04'],
+                    ['name' => 'felder', 'label' => 'Felder', 'type' => 'textarea', 'rows' => 5, 'value' => "title\ndescriptionHtml\nvendor\ntags\nseo.title\nseo.description\nctc metafields"],
+                ],
+            ],
             'sync-job' => [
                 'badge' => 'Automation',
                 'title' => 'Zeitgesteuerter Sync-Job',
-                'body' => 'Dummy-Maske fuer Upsert- und Delta-Laeufe aus JTL, plentymarkets, Xentral, SAP R/3 oder Pimcore.',
+                'body' => 'Dummy-Maske fuer Upsert- und Delta-Laeufe aus JTL, plentymarkets, Xentral, SAP R/3, Pimcore oder Shopify.',
                 'real_link' => ['label' => 'Echte Sync-Jobs oeffnen', 'route' => 'app_sync_job_index'],
                 'fields' => [
                     ['name' => 'jobname', 'label' => 'Jobname', 'type' => 'text', 'value' => 'JTL Delta Bestand und Preis'],
-                    ['name' => 'system', 'label' => 'System', 'type' => 'select', 'options' => ['JTL', 'plentymarkets', 'Xentral', 'SAP R/3', 'Pimcore']],
+                    ['name' => 'system', 'label' => 'System', 'type' => 'select', 'options' => ['JTL', 'plentymarkets', 'Xentral', 'SAP R/3', 'Pimcore', 'Shopify']],
                     ['name' => 'modus', 'label' => 'Modus', 'type' => 'select', 'options' => ['Delta', 'Upsert']],
                     ['name' => 'intervall', 'label' => 'Intervall Minuten', 'type' => 'number', 'value' => '60'],
                 ],

@@ -11,7 +11,7 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 | Backend | PHP 8.2+, Symfony 7.4, Doctrine ORM, Symfony Console |
 | Frontend | Twig, Asset Mapper, responsive Admin-Oberfläche |
 | Datenmodell | Produkte, Varianten, Medien, Quellen, Channel-Listings, Publication Runs, Sync-Jobs |
-| Integrationen | Shopware Admin API, Amazon SP-API vorbereitet, JTL, plentymarkets, Xentral, SAP R/3, Pimcore |
+| Integrationen | Shopware Admin API, Amazon SP-API vorbereitet, JTL, plentymarkets, Xentral, SAP R/3, Pimcore, Shopify |
 | Qualität | PHPUnit-Tests, Twig-/Container-Linting, sichere Dummy-Konfigurationen |
 | Betrieb | Servervariablen/private Config statt Secrets im Repository |
 
@@ -52,6 +52,7 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 | Xentral | ERP-/Prozessdaten, Varianten, Preis/Bestand und Preview |
 | SAP R/3 | Materialstamm-nahe Payloads, IDoc-/BAPI-Preview, Gateway-Proxy-Vorbereitung |
 | Pimcore | PIM/DAM-Intake, localized fields, Assets, Classification-Attribute und Objekt-Write-back |
+| Shopify | Admin-API-Intake, Produkt-/Variantendaten, Bilder, SEO-Felder und GraphQL-Write-back |
 
 ## Screenshots
 
@@ -143,6 +144,7 @@ Dieses Projekt zeigt mehrere Fähigkeiten, die im Alltag von Produkt-, Plattform
 | Amazon Connector | [`src/Integration/Amazon/AmazonSpApiConnector.php`](../src/Integration/Amazon/AmazonSpApiConnector.php) |
 | SAP R/3 Connector | [`src/Integration/SapR3/SapR3GatewayConnector.php`](../src/Integration/SapR3/SapR3GatewayConnector.php) |
 | Pimcore Connector | [`src/Integration/Pimcore/PimcoreApiConnector.php`](../src/Integration/Pimcore/PimcoreApiConnector.php) |
+| Shopify Connector | [`src/Integration/Shopify/ShopifyAdminApiConnector.php`](../src/Integration/Shopify/ShopifyAdminApiConnector.php) |
 
 ## Lokaler Start
 

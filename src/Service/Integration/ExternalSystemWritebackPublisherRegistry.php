@@ -11,6 +11,7 @@ use App\Integration\Jtl\JtlErpApiConnector;
 use App\Integration\Pimcore\PimcoreApiConnector;
 use App\Integration\Plentymarkets\PlentymarketsRestApiConnector;
 use App\Integration\SapR3\SapR3GatewayConnector;
+use App\Integration\Shopify\ShopifyAdminApiConnector;
 
 final class ExternalSystemWritebackPublisherRegistry
 {
@@ -24,6 +25,7 @@ final class ExternalSystemWritebackPublisherRegistry
         PlentymarketsRestApiConnector $plentymarketsRestApiConnector,
         SapR3GatewayConnector $sapR3GatewayConnector,
         PimcoreApiConnector $pimcoreApiConnector,
+        ShopifyAdminApiConnector $shopifyAdminApiConnector,
     )
     {
         foreach ([
@@ -31,6 +33,7 @@ final class ExternalSystemWritebackPublisherRegistry
             $plentymarketsRestApiConnector,
             $sapR3GatewayConnector,
             $pimcoreApiConnector,
+            $shopifyAdminApiConnector,
         ] as $publisher) {
             $this->publishers[$publisher->system()->value] = $publisher;
         }

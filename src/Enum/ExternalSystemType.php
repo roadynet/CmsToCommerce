@@ -12,6 +12,7 @@ enum ExternalSystemType: string
     case Xentral = 'xentral';
     case SapR3 = 'sap_r3';
     case Pimcore = 'pimcore';
+    case Shopify = 'shopify';
 
     public function label(): string
     {
@@ -22,6 +23,7 @@ enum ExternalSystemType: string
             self::Xentral => 'Xentral',
             self::SapR3 => 'SAP R/3',
             self::Pimcore => 'Pimcore',
+            self::Shopify => 'Shopify',
         };
     }
 }

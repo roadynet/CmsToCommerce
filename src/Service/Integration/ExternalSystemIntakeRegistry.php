@@ -19,6 +19,7 @@ final class ExternalSystemIntakeRegistry
         XentralPayloadNormalizer $xentralPayloadNormalizer,
         SapR3PayloadNormalizer $sapR3PayloadNormalizer,
         PimcorePayloadNormalizer $pimcorePayloadNormalizer,
+        ShopifyPayloadNormalizer $shopifyPayloadNormalizer,
         GenericPayloadNormalizer $genericPayloadNormalizer,
     ) {
         $this->normalizers = [
@@ -27,6 +28,7 @@ final class ExternalSystemIntakeRegistry
             $xentralPayloadNormalizer,
             $sapR3PayloadNormalizer,
             $pimcorePayloadNormalizer,
+            $shopifyPayloadNormalizer,
             $genericPayloadNormalizer,
         ];
     }

@@ -20,6 +20,7 @@ final class ExternalSystemWritebackPreviewRegistry
         XentralWritebackPreviewBuilder $xentralWritebackPreviewBuilder,
         SapR3WritebackPreviewBuilder $sapR3WritebackPreviewBuilder,
         PimcoreWritebackPreviewBuilder $pimcoreWritebackPreviewBuilder,
+        ShopifyWritebackPreviewBuilder $shopifyWritebackPreviewBuilder,
     ) {
         foreach ([
             $jtlWritebackPreviewBuilder,
@@ -27,6 +28,7 @@ final class ExternalSystemWritebackPreviewRegistry
             $xentralWritebackPreviewBuilder,
             $sapR3WritebackPreviewBuilder,
             $pimcoreWritebackPreviewBuilder,
+            $shopifyWritebackPreviewBuilder,
         ] as $builder) {
             $this->builders[$builder->system()->value] = $builder;
         }

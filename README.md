@@ -18,7 +18,7 @@ Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, 
 - Amazon-A-Listing-Drafts mit Qualitätsprüfung
 - Shopware Admin API inklusive Produkt- und Medienzuordnung
 - vorbereitete Amazon-SP-API-Anbindung ohne Live-Testzwang
-- JTL-, plentymarkets-, Xentral-, SAP-R/3- und Pimcore-Vorbereitung mit Sync-/Write-back-Flows
+- JTL-, plentymarkets-, Xentral-, SAP-R/3-, Pimcore- und Shopify-Vorbereitung mit Sync-/Write-back-Flows
 - zeitgesteuerte externe Sync-Jobs
 - Export-Vorschau als JSON pro Channel
 
@@ -53,6 +53,7 @@ Wichtige Variablen:
 - `PLENTY_*`
 - `SAP_R3_*`
 - `PIMCORE_*`
+- `SHOPIFY_*`
 
 Beispiele liegen in:
 

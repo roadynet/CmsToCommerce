@@ -143,6 +143,29 @@ Aktueller CTC-Stand:
 - Live-Write-back ist über einen Pimcore-Gateway-Endpunkt vorbereitet
 - Sicherheitsmodus: Live-Senden bleibt aus, bis `PIMCORE_ENABLE_LIVE_WRITEBACK=1` gesetzt ist
 
+### 6. Shopify
+
+Warum als Commerce-Adapter:
+
+- Shopify ist ein häufiges Zielsystem für D2C- und Commerce-Teams
+- Produktdaten, Varianten, Preise, Bestände, Bilder, Tags und SEO-Felder lassen sich sehr gut in den CTC-Prozess einbinden
+- CTC kann Shopify als Datenquelle nutzen und optimierte Listing-Texte per Admin API zurückspielen
+
+Empfohlene Adapter-Reihenfolge:
+
+1. Produkt-, Varianten- und Bilddaten aus Shopify Admin API Payloads lesen
+2. SKU, Barcode/EAN, Preis, Bestand, Vendor, Product Type und Tags normalisieren
+3. Delta-Sync für Preis und Bestand über Varianten unterstützen
+4. Write-back-Preview für `productUpdate` per Admin GraphQL API erzeugen
+5. Live-Write-back erst mit Admin Access Token und `SHOPIFY_ENABLE_LIVE_WRITEBACK=1` aktivieren
+
+Aktueller CTC-Stand:
+
+- Shopify-Intake ist für Produktdaten, Varianten, Bilder, Tags, Vendor und Product Type vorbereitet
+- Preview-Write-back erzeugt ein Admin-GraphQL-Payload für `productUpdate`, SEO-Felder und CTC-Metafelder
+- Live-Write-back ist über Shopify Admin GraphQL vorbereitet
+- Sicherheitsmodus: Live-Senden bleibt aus, bis `SHOPIFY_ENABLE_LIVE_WRITEBACK=1` gesetzt ist
+
 ## Technische Integrationslogik in CTC
 
 Unabhängig vom Zielsystem sollte jeder neue Connector in derselben Reihenfolge wachsen:

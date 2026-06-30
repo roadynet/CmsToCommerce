@@ -251,6 +251,11 @@
                                     <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_pimcore') }}">
                                     <button class="button button-primary" type="submit">Pimcore live senden</button>
                                 </form>
+                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'shopify'}) }}">Shopify Preview</a>
+                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'shopify'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an Shopify senden?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_shopify') }}">
+                                    <button class="button button-primary" type="submit">Shopify live senden</button>
+                                </form>
                             </div>
                         {% endif %}
                     </article>

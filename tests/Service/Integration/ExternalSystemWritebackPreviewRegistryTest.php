@@ -15,6 +15,7 @@ use App\Service\Integration\JtlWritebackPreviewBuilder;
 use App\Service\Integration\PimcoreWritebackPreviewBuilder;
 use App\Service\Integration\PlentymarketsWritebackPreviewBuilder;
 use App\Service\Integration\SapR3WritebackPreviewBuilder;
+use App\Service\Integration\ShopifyWritebackPreviewBuilder;
 use App\Service\Integration\XentralWritebackPreviewBuilder;
 use App\Service\Listing\ProductListingDraftBuilder;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,7 @@ final class ExternalSystemWritebackPreviewRegistryTest extends TestCase
             new XentralWritebackPreviewBuilder($draftBuilder, $translator),
             new SapR3WritebackPreviewBuilder($draftBuilder, $translator),
             new PimcoreWritebackPreviewBuilder($draftBuilder, $translator),
+            new ShopifyWritebackPreviewBuilder($draftBuilder, $translator),
         );
     }
 
@@ -98,5 +100,27 @@ final class ExternalSystemWritebackPreviewRegistryTest extends TestCase
         self::assertSame('Product', $preview['payload']['object']['className']);
         self::assertArrayHasKey('ctcOptimizedTitle', $preview['payload']['data']);
         self::assertArrayHasKey('de', $preview['payload']['localizedfields']);
+    }
+
+    public function testBuildsShopifyWritebackPreview(): void
+    {
+        $product = (new Product('Edelstahl Trinkflasche 750 ml'))
+            ->setBrand('North Trail')
+            ->setCategoryPath('Outdoor/Trinkflaschen')
+            ->setDescription('Doppelwandige Edelstahl-Trinkflasche.');
+        $product->addSource(
+            (new ProductSource(
+                SourceType::CmsImport,
+                '{"product":{"id":471100,"admin_graphql_api_id":"gid://shopify/Product/471100","handle":"edelstahl-trinkflasche"}}'
+            ))->setCmsSystem('shopify')->setExternalReference('gid://shopify/Product/471100')->setLanguageCode('de')
+        );
+
+        $preview = $this->registry()->build($product, ExternalSystemType::Shopify);
+
+        self::assertSame('shopify', $preview['system']);
+        self::assertSame('productUpdate', $preview['payload']['admin_api']['mutation']);
+        self::assertSame('gid://shopify/Product/471100', $preview['payload']['graphql']['variables']['input']['id']);
+        self::assertArrayHasKey('seo', $preview['payload']['graphql']['variables']['input']);
+        self::assertArrayHasKey('metafields', $preview['payload']['graphql']['variables']['input']);
     }
 }
