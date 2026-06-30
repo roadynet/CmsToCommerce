@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Symfony tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: ctype, iconv, intl, pdo, pdo_sqlite
+          coverage: none
+
+      - name: Validate composer files
+        run: composer validate --no-check-publish --no-check-all
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Lint container
+        run: php bin/console lint:container
+
+      - name: Lint Twig templates
+        run: php bin/console lint:twig templates
+
+      - name: Run PHPUnit
+        run: php bin/phpunit

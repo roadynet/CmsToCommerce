@@ -1,6 +1,12 @@
 # CMS to Commerce Hub
 
+[![CI](https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml/badge.svg)](https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml)
+
+Live-Demo: [cc.mcmonaco.de](https://cc.mcmonaco.de)
+
 Symfony-Plattform für einen geschützten Produkt-Workflow von CMS-/Dateiimport bis zu marktplatzfähigen Amazon- und Shopware-Listings.
+
+![Demo-Flow](docs/screenshots/00-demo-flow.gif)
 
 ## Recruiter / Projektüberblick
 

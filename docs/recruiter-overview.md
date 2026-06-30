@@ -57,6 +57,10 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 
 ## Screenshots
 
+### Demo-Flow
+
+![Demo-Flow](screenshots/00-demo-flow.gif)
+
 ### Dashboard
 
 ![Dashboard](screenshots/01-dashboard.png)
@@ -69,13 +73,13 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 
 ![Import](screenshots/03-import.png)
 
-### Formular-Hub
+### Zugangsdaten-Portal
 
-![Formular-Hub](screenshots/04-formulare-sections.png)
+![Zugangsdaten-Portal](screenshots/04-zugangsdaten.png)
 
-### Shopware-Formular
+### Produktdetail
 
-![Shopware-Formular](screenshots/05-formulare-shopware.png)
+![Produktdetail](screenshots/05-produktdetail.png)
 
 ### Sync-Jobs
 
