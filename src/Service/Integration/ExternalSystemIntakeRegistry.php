@@ -17,12 +17,14 @@ final class ExternalSystemIntakeRegistry
         JtlPayloadNormalizer $jtlPayloadNormalizer,
         PlentymarketsPayloadNormalizer $plentymarketsPayloadNormalizer,
         XentralPayloadNormalizer $xentralPayloadNormalizer,
+        SapR3PayloadNormalizer $sapR3PayloadNormalizer,
         GenericPayloadNormalizer $genericPayloadNormalizer,
     ) {
         $this->normalizers = [
             $jtlPayloadNormalizer,
             $plentymarketsPayloadNormalizer,
             $xentralPayloadNormalizer,
+            $sapR3PayloadNormalizer,
             $genericPayloadNormalizer,
         ];
     }

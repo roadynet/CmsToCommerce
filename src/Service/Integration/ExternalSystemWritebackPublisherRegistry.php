@@ -9,6 +9,7 @@ use App\Entity\Product;
 use App\Enum\ExternalSystemType;
 use App\Integration\Jtl\JtlErpApiConnector;
 use App\Integration\Plentymarkets\PlentymarketsRestApiConnector;
+use App\Integration\SapR3\SapR3GatewayConnector;
 
 final class ExternalSystemWritebackPublisherRegistry
 {
@@ -20,11 +21,13 @@ final class ExternalSystemWritebackPublisherRegistry
     public function __construct(
         JtlErpApiConnector $jtlErpApiConnector,
         PlentymarketsRestApiConnector $plentymarketsRestApiConnector,
+        SapR3GatewayConnector $sapR3GatewayConnector,
     )
     {
         foreach ([
             $jtlErpApiConnector,
             $plentymarketsRestApiConnector,
+            $sapR3GatewayConnector,
         ] as $publisher) {
             $this->publishers[$publisher->system()->value] = $publisher;
         }

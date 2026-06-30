@@ -18,11 +18,13 @@ final class ExternalSystemWritebackPreviewRegistry
         JtlWritebackPreviewBuilder $jtlWritebackPreviewBuilder,
         PlentymarketsWritebackPreviewBuilder $plentymarketsWritebackPreviewBuilder,
         XentralWritebackPreviewBuilder $xentralWritebackPreviewBuilder,
+        SapR3WritebackPreviewBuilder $sapR3WritebackPreviewBuilder,
     ) {
         foreach ([
             $jtlWritebackPreviewBuilder,
             $plentymarketsWritebackPreviewBuilder,
             $xentralWritebackPreviewBuilder,
+            $sapR3WritebackPreviewBuilder,
         ] as $builder) {
             $this->builders[$builder->system()->value] = $builder;
         }

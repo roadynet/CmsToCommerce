@@ -47,6 +47,14 @@ services:
             string $plentyPassword: '%env(PLENTY_PASSWORD)%'
             string $plentyDefaultLang: '%env(PLENTY_DEFAULT_LANG)%'
             bool $plentyEnableLiveWriteback: '%env(bool:PLENTY_ENABLE_LIVE_WRITEBACK)%'
+            string $sapR3GatewayUrl: '%env(SAP_R3_GATEWAY_URL)%'
+            string $sapR3WritebackPath: '%env(SAP_R3_WRITEBACK_PATH)%'
+            string $sapR3Client: '%env(SAP_R3_CLIENT)%'
+            string $sapR3Username: '%env(SAP_R3_USERNAME)%'
+            string $sapR3Password: '%env(SAP_R3_PASSWORD)%'
+            string $sapR3SystemId: '%env(SAP_R3_SYSTEM_ID)%'
+            string $sapR3Language: '%env(SAP_R3_LANGUAGE)%'
+            bool $sapR3EnableLiveWriteback: '%env(bool:SAP_R3_ENABLE_LIVE_WRITEBACK)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

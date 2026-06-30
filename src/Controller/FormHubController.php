@@ -133,14 +133,25 @@ final class FormHubController extends AbstractController
                     ['name' => 'notiz', 'label' => 'Interne Notiz', 'type' => 'textarea', 'rows' => 4, 'value' => 'Optimierte CTC-Texte zur Pruefung bereitstellen.'],
                 ],
             ],
+            'sap-r3-writeback' => [
+                'badge' => 'SAP R/3',
+                'title' => 'SAP R/3 Write-back',
+                'body' => 'Dummy-Maske fuer IDoc-/BAPI-nahes Rueckschreiben optimierter CTC-Texte ueber SAP Gateway, PI/PO, CPI oder RFC-Proxy.',
+                'fields' => [
+                    ['name' => 'matnr', 'label' => 'Materialnummer MATNR', 'type' => 'text', 'value' => '000000000000471100'],
+                    ['name' => 'mandant', 'label' => 'Mandant', 'type' => 'text', 'value' => '100'],
+                    ['name' => 'transport', 'label' => 'Transport', 'type' => 'select', 'options' => ['MATMAS05 IDoc', 'BAPI_MATERIAL_SAVEDATA', 'SAP Gateway Proxy']],
+                    ['name' => 'felder', 'label' => 'Felder', 'type' => 'textarea', 'rows' => 5, 'value' => "MAKTX Kurztext\nZCTC Titel\nZCTC Bulletpoints\nZCTC Langtext\nZCTC Keywords"],
+                ],
+            ],
             'sync-job' => [
                 'badge' => 'Automation',
                 'title' => 'Zeitgesteuerter Sync-Job',
-                'body' => 'Dummy-Maske fuer Upsert- und Delta-Laeufe aus JTL, plentymarkets oder Xentral.',
+                'body' => 'Dummy-Maske fuer Upsert- und Delta-Laeufe aus JTL, plentymarkets, Xentral oder SAP R/3.',
                 'real_link' => ['label' => 'Echte Sync-Jobs oeffnen', 'route' => 'app_sync_job_index'],
                 'fields' => [
                     ['name' => 'jobname', 'label' => 'Jobname', 'type' => 'text', 'value' => 'JTL Delta Bestand und Preis'],
-                    ['name' => 'system', 'label' => 'System', 'type' => 'select', 'options' => ['JTL', 'plentymarkets', 'Xentral']],
+                    ['name' => 'system', 'label' => 'System', 'type' => 'select', 'options' => ['JTL', 'plentymarkets', 'Xentral', 'SAP R/3']],
                     ['name' => 'modus', 'label' => 'Modus', 'type' => 'select', 'options' => ['Delta', 'Upsert']],
                     ['name' => 'intervall', 'label' => 'Intervall Minuten', 'type' => 'number', 'value' => '60'],
                 ],

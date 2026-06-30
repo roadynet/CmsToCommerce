@@ -96,6 +96,29 @@ Empfohlene Adapter-Reihenfolge:
 3. Status- und Freigabeinformationen koppeln
 4. optionales Write-back für interne Produktdatenfelder
 
+### 4. SAP R/3
+
+Warum als Enterprise-Adapter:
+
+- relevant bei etablierten Materialstamm-Prozessen in mittelgroßen und großen Unternehmen
+- starke Quelle für Materialnummern, Warengruppen, Preise, Bestände, Werke und Vertriebsdaten
+- technisch meist nicht direkt per REST erreichbar, sondern über SAP Gateway, PI/PO, CPI, IDoc oder RFC/BAPI-Proxy
+
+Empfohlene Adapter-Reihenfolge:
+
+1. Materialstamm aus MARA/MAKT/MVKE/MARD-nahen Payloads lesen
+2. IDoc-/Gateway-JSON in das CTC-Produktmodell normalisieren
+3. Delta-Sync für Preis und Bestand aus Werk/Lagerort ergänzen
+4. Write-back-Preview als MATMAS05-/BAPI_MATERIAL_SAVEDATA-nahes Payload erzeugen
+5. Live-Write-back erst über freigegebenen SAP-Gateway-/RFC-Proxy aktivieren
+
+Aktueller CTC-Stand:
+
+- SAP-R/3-Intake ist für Materialnummer, Kurztext, Warengruppe, Varianten, EAN, Preis, Bestand und Medienquellen vorbereitet
+- Preview-Write-back erzeugt ein IDoc-/BAPI-nahes Payload für optimierte CTC-Listingtexte
+- Live-Write-back ist als Gateway-Proxy vorbereitet
+- Sicherheitsmodus: Live-Senden bleibt aus, bis `SAP_R3_ENABLE_LIVE_WRITEBACK=1` gesetzt ist
+
 ## Technische Integrationslogik in CTC
 
 Unabhängig vom Zielsystem sollte jeder neue Connector in derselben Reihenfolge wachsen:
@@ -107,4 +130,4 @@ Unabhängig vom Zielsystem sollte jeder neue Connector in derselben Reihenfolge 
 5. Delta-Sync ergänzen
 6. optionales Write-back aktivieren
 
-So bleibt CTC konsistent, auch wenn später weitere Systeme wie Akeneo, Tradebyte, Microsoft Business Central oder SAP dazukommen.
+So bleibt CTC konsistent, auch wenn später weitere Systeme wie Akeneo, Tradebyte oder Microsoft Business Central dazukommen.
