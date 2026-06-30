@@ -13,7 +13,7 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 | Datenmodell | Produkte, Varianten, Medien, Quellen, Channel-Listings, Publication Runs, Sync-Jobs |
 | Integrationen | Shopware Admin API, Amazon SP-API vorbereitet, JTL, plentymarkets, Xentral, SAP R/3, Pimcore, Shopify |
 | Qualität | PHPUnit-Tests, Twig-/Container-Linting, sichere Dummy-Konfigurationen |
-| Betrieb | Servervariablen/private Config statt Secrets im Repository |
+| Betrieb | Servervariablen/private Config statt Secrets im Repository, Deployment- und DB-Migrationscheck |
 
 ## Was das Projekt demonstriert
 
@@ -23,6 +23,7 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 - sichere Vorbereitung externer Live-Schnittstellen mit Preview- und Sperrlogik
 - robuste Importlogik für TXT-Dateien, Bilder, API-Payloads, Varianten und Medien
 - technische Dokumentation, Tests und Deployment-Routine
+- reduziertes Admin-UX-Konzept mit maximal drei sichtbaren Hauptaktionen pro Bereich
 
 ## Funktionsumfang
 
@@ -100,6 +101,8 @@ Dadurch sind sehr unterschiedliche Systeme wie JTL, SAP R/3 und Pimcore konsiste
 
 Produktive Zugangsdaten liegen nicht im Git-Repository. CTC liest sensible Werte aus globalen Servervariablen oder privaten Dateien außerhalb des Projektordners.
 
+Admins koennen channel-spezifische Zugangsdaten ausserdem ueber das Portal unter `/credentials` pflegen. Die Werte werden in private `ctc-*.env` Dateien geschrieben, im Formular maskiert angezeigt und beim Leerlassen nicht ueberschrieben.
+
 Live-Aktionen sind zusätzlich über explizite Flags geschützt, zum Beispiel:
 
 ```env
@@ -114,10 +117,10 @@ PIMCORE_ENABLE_LIVE_WRITEBACK=0
 
 Die Integrationen sind so gebaut, dass sie ohne echte externe Systeme testbar bleiben. HTTP-Clients werden gemockt, Live-Schreibvorgänge bleiben per Default deaktiviert und Payloads können als Preview geprüft werden.
 
-Aktueller Stand nach der Pimcore-Erweiterung:
+Aktueller Stand nach der UX- und Credential-Portal-Erweiterung:
 
 ```text
-47 Tests / 403 Assertions
+53 Tests / 455 Assertions
 ```
 
 ## Warum das für Recruiter interessant ist
@@ -161,5 +164,6 @@ Für lokale Entwicklung nutzt die committed `.env` nur Dummy- und Defaultwerte. 
 
 - [Architektur](architecture.md)
 - [Integrations-Roadmap](integration-roadmap.md)
+- [Betrieb, Deployment und Datenbank](operations.md)
 - [Private Config Beispiel](private-config.example.env)
 - [Server Environment Beispiel](server-env.example.apache.conf)

@@ -20,6 +20,8 @@ Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, 
 - vorbereitete Amazon-SP-API-Anbindung ohne Live-Testzwang
 - JTL-, plentymarkets-, Xentral-, SAP-R/3-, Pimcore- und Shopify-Vorbereitung mit Sync-/Write-back-Flows
 - zeitgesteuerte externe Sync-Jobs
+- Zugangsdaten-Portal pro Channel/System mit maskierten Secrets
+- reduzierte Portal-UX mit maximal drei sichtbaren Hauptaktionen pro Bereich
 - Export-Vorschau als JSON pro Channel
 
 ## Lokal starten
@@ -65,3 +67,18 @@ Beispiele liegen in:
 
 - [docs/private-config.example.env](docs/private-config.example.env)
 - [docs/server-env.example.apache.conf](docs/server-env.example.apache.conf)
+
+## Betrieb und Datenbank
+
+Nach Deployments muss die produktive Datenbank auf dem aktuellen Migrationsstand sein:
+
+```bash
+php bin/console doctrine:migrations:status --env=prod
+php bin/console doctrine:migrations:migrate --env=prod --no-interaction
+php bin/console doctrine:schema:validate --env=prod
+```
+
+Wenn im Dashboard "Datenbank noch nicht bereit" erscheint, ist die Datenbankverbindung
+oder das Schema nicht synchron. Details und Checkliste:
+
+- [Betrieb, Deployment und Datenbank](docs/operations.md)
