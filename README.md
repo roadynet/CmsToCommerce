@@ -2,6 +2,12 @@
 
 Symfony-Plattform für einen geschützten Produkt-Workflow von CMS-/Dateiimport bis zu marktplatzfähigen Amazon- und Shopware-Listings.
 
+## Recruiter / Projektüberblick
+
+Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, Architektur-Highlights und Integrationen liegt hier:
+
+- [Recruiter-Überblick](docs/recruiter-overview.md)
+
 ## Enthaltene Funktionen
 
 - Admin-Login
