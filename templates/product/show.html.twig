@@ -12,11 +12,16 @@
         <div class="button-group">
             <a class="button" href="{{ path('app_product_index') }}">Zurück zur Liste</a>
             <a class="button" href="{{ path('app_product_edit', {id: product.id}) }}">Bearbeiten</a>
-            <a class="button button-primary" href="{{ path('app_product_new') }}">Weiteres Produkt importieren</a>
-            <form class="inline-form" method="post" action="{{ path('app_product_delete', {id: product.id}) }}" onsubmit="return confirm('Produkt wirklich löschen?');">
-                <input type="hidden" name="_token" value="{{ csrf_token('product_delete_' ~ product.id) }}">
-                <button class="button button-danger" type="submit">Löschen</button>
-            </form>
+            <details class="action-menu">
+                <summary class="button">Mehr</summary>
+                <div class="action-menu-list">
+                    <a href="{{ path('app_product_new') }}">Weiteres Produkt importieren</a>
+                    <form method="post" action="{{ path('app_product_delete', {id: product.id}) }}" onsubmit="return confirm('Produkt wirklich löschen?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('product_delete_' ~ product.id) }}">
+                        <button class="menu-danger" type="submit">Produkt löschen</button>
+                    </form>
+                </div>
+            </details>
         </div>
     </section>
 
@@ -230,32 +235,43 @@
                         {% if channel.value == 'amazon' %}
                             <p>JTL kann jetzt als Preview geprüft und bei aktiver Freigabe direkt mit den optimierten CTC-Texten aktualisiert werden.</p>
                             <div class="button-group">
-                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'jtl'}) }}">JTL Preview</a>
-                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'jtl'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live nach JTL senden?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_jtl') }}">
-                                    <button class="button button-primary" type="submit">JTL live senden</button>
-                                </form>
-                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'plentymarkets'}) }}">plentymarkets Preview</a>
-                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'plentymarkets'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live nach plentymarkets senden?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_plentymarkets') }}">
-                                    <button class="button button-primary" type="submit">plentymarkets live senden</button>
-                                </form>
-                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'xentral'}) }}">Xentral Preview</a>
-                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'sap_r3'}) }}">SAP R/3 Preview</a>
-                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'sap_r3'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an den SAP-R/3-Gateway-Proxy senden?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_sap_r3') }}">
-                                    <button class="button button-primary" type="submit">SAP R/3 live senden</button>
-                                </form>
-                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'pimcore'}) }}">Pimcore Preview</a>
-                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'pimcore'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an Pimcore senden?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_pimcore') }}">
-                                    <button class="button button-primary" type="submit">Pimcore live senden</button>
-                                </form>
-                                <a class="button" href="{{ path('app_product_writeback_preview', {id: product.id, system: 'shopify'}) }}">Shopify Preview</a>
-                                <form class="inline-form" method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'shopify'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an Shopify senden?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_shopify') }}">
-                                    <button class="button button-primary" type="submit">Shopify live senden</button>
-                                </form>
+                                <a class="button" href="{{ path('app_product_export', {id: product.id, channel: channel.value}) }}">JSON</a>
+                                <details class="action-menu">
+                                    <summary class="button">Previews</summary>
+                                    <div class="action-menu-list">
+                                        <a href="{{ path('app_product_writeback_preview', {id: product.id, system: 'jtl'}) }}">JTL</a>
+                                        <a href="{{ path('app_product_writeback_preview', {id: product.id, system: 'plentymarkets'}) }}">plentymarkets</a>
+                                        <a href="{{ path('app_product_writeback_preview', {id: product.id, system: 'xentral'}) }}">Xentral</a>
+                                        <a href="{{ path('app_product_writeback_preview', {id: product.id, system: 'sap_r3'}) }}">SAP R/3</a>
+                                        <a href="{{ path('app_product_writeback_preview', {id: product.id, system: 'pimcore'}) }}">Pimcore</a>
+                                        <a href="{{ path('app_product_writeback_preview', {id: product.id, system: 'shopify'}) }}">Shopify</a>
+                                    </div>
+                                </details>
+                                <details class="action-menu">
+                                    <summary class="button button-primary">Live senden</summary>
+                                    <div class="action-menu-list">
+                                        <form method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'jtl'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live nach JTL senden?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_jtl') }}">
+                                            <button type="submit">JTL</button>
+                                        </form>
+                                        <form method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'plentymarkets'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live nach plentymarkets senden?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_plentymarkets') }}">
+                                            <button type="submit">plentymarkets</button>
+                                        </form>
+                                        <form method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'sap_r3'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an den SAP-R/3-Gateway-Proxy senden?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_sap_r3') }}">
+                                            <button type="submit">SAP R/3</button>
+                                        </form>
+                                        <form method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'pimcore'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an Pimcore senden?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_pimcore') }}">
+                                            <button type="submit">Pimcore</button>
+                                        </form>
+                                        <form method="post" action="{{ path('app_product_writeback_publish', {id: product.id, system: 'shopify'}) }}" onsubmit="return confirm('Optimierte CTC-Texte jetzt live an Shopify senden?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('writeback_' ~ product.id ~ '_shopify') }}">
+                                            <button type="submit">Shopify</button>
+                                        </form>
+                                    </div>
+                                </details>
                             </div>
                         {% endif %}
                     </article>

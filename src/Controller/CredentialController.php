@@ -63,10 +63,17 @@ final class CredentialController extends AbstractController
             return $this->redirectToRoute('app_credentials_show', ['channel' => $channel]);
         }
 
+        $channels = $this->channelCredentialManager->channels();
+
         return $this->render('credentials/show.html.twig', [
-            'channels' => $this->channelCredentialManager->channels(),
+            'channels' => $channels,
             'active_channel' => $activeChannel,
             'active_slug' => $channel,
+            'credential_summary' => [
+                'total' => count($channels),
+                'ready' => count(array_filter($channels, static fn (array $channel): bool => (bool) $channel['ready'])),
+                'open_fields' => array_sum(array_map(static fn (array $channel): int => (int) $channel['required_missing_count'], $channels)),
+            ],
         ]);
     }
 }
