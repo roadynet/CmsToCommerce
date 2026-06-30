@@ -41,6 +41,11 @@ Produktive Zugangsdaten gehören nicht ins Repository. CTC lädt sensible Werte 
 2. private Dateien außerhalb des Projektordners unter `../private-config/ctc*.env`
 3. harmlose Defaults aus der committed `.env`
 
+Im Portal koennen Admins die channel-spezifischen Zugangsdaten unter `/credentials` pflegen.
+Die Formulare schreiben in `../private-config/ctc-shopware.env`, `ctc-amazon.env`,
+`ctc-shopify.env` usw.; geheime Werte werden maskiert angezeigt und beim Leerlassen
+nicht ueberschrieben.
+
 Wichtige Variablen:
 
 - `APP_SECRET`
@@ -51,6 +56,7 @@ Wichtige Variablen:
 - `AMAZON_*`
 - `JTL_*`
 - `PLENTY_*`
+- `XENTRAL_*`
 - `SAP_R3_*`
 - `PIMCORE_*`
 - `SHOPIFY_*`

@@ -25,6 +25,7 @@ $candidateFiles = array_values(array_filter([
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-amazon.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-jtl.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-plentymarkets.env',
+    $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-xentral.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-sap-r3.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-pimcore.env',
     $privateConfigDir.DIRECTORY_SEPARATOR.'ctc-shopify.env',

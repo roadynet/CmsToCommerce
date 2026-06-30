@@ -406,6 +406,41 @@ label {
     font-weight: 600;
 }
 
+.required-marker {
+    color: var(--warning);
+}
+
+.field-meta,
+.muted-copy {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.field-meta code {
+    color: #dce7ff;
+}
+
+.checkbox-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.85rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.checkbox-row input {
+    width: auto;
+}
+
+.checkbox-row small {
+    display: block;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 0.15rem;
+}
+
 input,
 select,
 textarea {
