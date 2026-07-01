@@ -4,7 +4,14 @@
 
 Demo deployed at: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
 
-Symfony-Plattform für einen geschützten Produkt-Workflow von CMS-/Dateiimport bis zu marktplatzfähigen Amazon- und Shopware-Listings.
+CMS to Commerce Hub ist eine Symfony-Plattform, die Produktdaten aus CMS-, PIM-, ERP- und Datei-Quellen übernimmt und daraus marktplatzfähige Produktseiten für Amazon und Shopware vorbereitet.
+
+## Auf einen Blick
+
+- **Was ist es?** Ein Commerce Integration Hub für Produktimport, Listing-Erzeugung, Medienzuordnung, Kanal-Preview und Sync-/Write-back-Flows.
+- **Live-Demo:** [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
+- **Tech-Stack:** PHP 8.4, Symfony 7.4, Doctrine ORM, Twig, Asset Mapper, PHPUnit, GitHub Actions.
+- **Warum interessant?** Das Projekt verbindet reale Commerce-Probleme: TXT- und Bildimporte, Amazon-SP-API-Vorbereitung, Shopware Admin API, ERP/PIM-Adapter, Secrets-Handling und testbare Integrationslogik.
 
 ![Demo-Flow](docs/screenshots/00-demo-flow.gif)
 
