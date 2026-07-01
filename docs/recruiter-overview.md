@@ -93,6 +93,15 @@ Live-Demo: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
 
 ## Technische Highlights
 
+### Senior-Level Engineering-Signale
+
+- Controller bleiben dünn; Import, Listing-Erzeugung, Publishing und externe Systeme liegen in separaten Services.
+- Kanal-Previews sind von Live-Schreibvorgängen getrennt, damit Integrationen testbar und sicher bleiben.
+- Secrets werden über Servervariablen oder private `ctc-*.env` Dateien geladen, nicht aus GitHub.
+- Fehlerfälle werden als Sync-/Publication-Runs sichtbar statt still verschluckt.
+- CI prüft Composer, Symfony-Container, Twig-Templates und PHPUnit.
+- Architektur- und Operations-Doku zeigen nicht nur Features, sondern Betrieb, Risiken und Trade-offs.
+
 ### Erweiterbare Adapter-Struktur
 
 Neue Systeme werden über denselben Ablauf eingebunden:

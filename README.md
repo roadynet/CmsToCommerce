@@ -42,6 +42,24 @@ GET /products/{id}/export/amazon
 GET /products/{id}/export/shopware
 ```
 
+## Senior-Level Review-Pfad
+
+| Frage | Einstieg |
+| --- | --- |
+| Was macht das Produkt? | [Live-Demo](https://cc.mcmonaco.de/demo) |
+| Welche Engineering-Entscheidungen stecken dahinter? | [Architektur](docs/architecture.md) |
+| Wie sieht das Projekt für Recruiter aus? | [Recruiter-Überblick](docs/recruiter-overview.md) |
+| Wie werden Betrieb, Datenbank und Secrets behandelt? | [Operations](docs/operations.md) |
+| Wie werden externe Systeme erweitert? | [Integrations-Roadmap](docs/integration-roadmap.md) |
+
+Senior-Signale im Projekt:
+
+- fachliche Logik liegt in Services statt in Controllern
+- externe Systeme werden über Adapter, Normalizer und Preview-/Publish-Gates getrennt
+- Live-Schreibvorgänge sind per Default deaktiviert und brauchen explizite Serverfreigaben
+- CI prüft Composer, Container, Twig und PHPUnit
+- produktive Secrets bleiben außerhalb des Repositories
+
 ## Recruiter / Projektüberblick
 
 Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, Architektur-Highlights und Integrationen liegt hier:
