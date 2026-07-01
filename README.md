@@ -15,6 +15,33 @@ CMS to Commerce Hub ist eine Symfony-Plattform, die Produktdaten aus CMS-, PIM-,
 
 ![Demo-Flow](docs/screenshots/00-demo-flow.gif)
 
+## Kleine Codebeispiele
+
+Sectionscode-Import: gleiche Nummer, gleiches Produkt.
+
+```text
+1.1.txt    -> Produktdaten
+1.1.png    -> Hauptbild
+1.1.1.png  -> Detailbild
+```
+
+Nach dem Import werden Kanal-Entwürfe vorbereitet.
+
+```php
+$product = $intakeManager->createFromInput($formData, $uploadedFiles);
+
+foreach (ChannelType::cases() as $channel) {
+    $publicationOrchestrator->prepare($product, $channel);
+}
+```
+
+Die fertigen Kanalstrukturen bleiben als kleine JSON-Preview abrufbar.
+
+```text
+GET /products/{id}/export/amazon
+GET /products/{id}/export/shopware
+```
+
 ## Recruiter / Projektüberblick
 
 Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, Architektur-Highlights und Integrationen liegt hier:
@@ -40,10 +67,7 @@ Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, 
 ## Lokal starten
 
 ```bash
-composer install
-php bin/console doctrine:migrations:migrate
-php bin/console asset-map:compile
-symfony server:start
+composer install && php bin/console doctrine:migrations:migrate && symfony server:start
 ```
 
 Für lokale Entwicklung nutzt die committed `.env` nur Dummy-/Defaultwerte.
@@ -86,7 +110,6 @@ Beispiele liegen in:
 Nach Deployments muss die produktive Datenbank auf dem aktuellen Migrationsstand sein:
 
 ```bash
-php bin/console doctrine:migrations:status --env=prod
 php bin/console doctrine:migrations:migrate --env=prod --no-interaction
 php bin/console doctrine:schema:validate --env=prod
 ```

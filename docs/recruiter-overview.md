@@ -130,7 +130,7 @@ Die Integrationen sind so gebaut, dass sie ohne echte externe Systeme testbar bl
 Aktueller Stand nach der UX- und Credential-Portal-Erweiterung:
 
 ```text
-53 Tests / 455 Assertions
+54 Tests / 462 Assertions
 ```
 
 ## Warum das für Recruiter interessant ist
@@ -144,28 +144,40 @@ Dieses Projekt zeigt mehrere Fähigkeiten, die im Alltag von Produkt-, Plattform
 - Sicherheitsbewusstsein bei Secrets, Live-Schreibvorgängen und Deployment
 - Fähigkeit, aus unscharfen Anforderungen ein klickbares Produkt zu bauen
 
-## Wo man im Code starten kann
+## Kleine Codebeispiele statt langer Code-Seiten
 
-| Einstieg | Datei |
-| --- | --- |
-| Produktimport | [`src/Service/Product/ProductIntakeManager.php`](../src/Service/Product/ProductIntakeManager.php) |
-| Listing-Erzeugung | [`src/Service/Listing/ProductListingDraftBuilder.php`](../src/Service/Listing/ProductListingDraftBuilder.php) |
-| Channel-Export | [`src/Service/Export/ProductChannelExportBuilder.php`](../src/Service/Export/ProductChannelExportBuilder.php) |
-| Publishing-Orchestrierung | [`src/Service/Publishing/PublicationOrchestrator.php`](../src/Service/Publishing/PublicationOrchestrator.php) |
-| Externe Systemadapter | [`src/Service/Integration`](../src/Service/Integration) |
-| Shopware Connector | [`src/Integration/Shopware/ShopwareAdminApiConnector.php`](../src/Integration/Shopware/ShopwareAdminApiConnector.php) |
-| Amazon Connector | [`src/Integration/Amazon/AmazonSpApiConnector.php`](../src/Integration/Amazon/AmazonSpApiConnector.php) |
-| SAP R/3 Connector | [`src/Integration/SapR3/SapR3GatewayConnector.php`](../src/Integration/SapR3/SapR3GatewayConnector.php) |
-| Pimcore Connector | [`src/Integration/Pimcore/PimcoreApiConnector.php`](../src/Integration/Pimcore/PimcoreApiConnector.php) |
-| Shopify Connector | [`src/Integration/Shopify/ShopifyAdminApiConnector.php`](../src/Integration/Shopify/ShopifyAdminApiConnector.php) |
+### Datei-Import
+
+```text
+1.1.txt    -> Produktdaten
+1.1.png    -> Hauptbild
+1.1.1.png  -> Detailbild
+1.2.txt    -> nächstes Produkt
+```
+
+### Service-Orchestrierung
+
+```php
+$product = $intakeManager->createFromInput($formData, $uploadedFiles);
+
+foreach (ChannelType::cases() as $channel) {
+    $publicationOrchestrator->prepare($product, $channel);
+}
+```
+
+### Kanal-Preview
+
+```text
+GET /products/{id}/export/amazon
+GET /products/{id}/export/shopware
+```
+
+Der Quellcode ist bewusst in Services, DTOs und Connectoren aufgeteilt. Für einen schnellen Review reichen die Beispiele oben; wer tiefer einsteigen möchte, findet die Fachlogik unter `src/Service` und die externen Adapter unter `src/Integration`.
 
 ## Lokaler Start
 
 ```bash
-composer install
-php bin/console doctrine:migrations:migrate
-php bin/console asset-map:compile
-symfony server:start
+composer install && php bin/console doctrine:migrations:migrate && symfony server:start
 ```
 
 Für lokale Entwicklung nutzt die committed `.env` nur Dummy- und Defaultwerte. Produktive Secrets gehören in Servervariablen oder nach `../private-config/ctc*.env`.
