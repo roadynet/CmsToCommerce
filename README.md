@@ -51,6 +51,7 @@ GET /products/{id}/export/shopware
 | Wie sieht das Projekt für Recruiter aus? | [Recruiter-Überblick](docs/recruiter-overview.md) |
 | Welche Praxis ist belegbar? | [Production Evidence](docs/production-evidence.md) |
 | Wie werden Betrieb, Datenbank und Secrets behandelt? | [OPERATIONS.md](OPERATIONS.md) |
+| Wie argumentiere ich das im Gespräch? | [Interview-Pitch](docs/interview-pitch.md) |
 | Wie werden externe Systeme erweitert? | [Integrations-Roadmap](docs/integration-roadmap.md) |
 
 Senior-Signale im Projekt:
@@ -68,6 +69,7 @@ Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, 
 
 - [Recruiter-Überblick](docs/recruiter-overview.md)
 - [Operations Runbook](OPERATIONS.md)
+- [Interview-Pitch](docs/interview-pitch.md)
 
 ## Enthaltene Funktionen
 
