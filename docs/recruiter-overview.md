@@ -4,6 +4,8 @@ Dieses Repository zeigt eine produktnahe Symfony-Plattform für Commerce-Workflo
 
 Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen Integrationsarchitektur: sichere Konfiguration, nachvollziehbare Sync-Läufe, erweiterbare Adapter und ein UI, mit dem Fachanwender Produktdaten prüfen können.
 
+Live-Demo: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
+
 ## Kurzprofil
 
 | Bereich | Umsetzung |
@@ -56,6 +58,10 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 | Shopify | Admin-API-Intake, Produkt-/Variantendaten, Bilder, SEO-Felder und GraphQL-Write-back |
 
 ## Screenshots
+
+### Öffentliche Demo
+
+![Öffentliche Demo](screenshots/00-public-demo.png)
 
 ### Demo-Flow
 

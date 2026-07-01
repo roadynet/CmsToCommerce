@@ -25,6 +25,20 @@ final class PageSmokeTest extends WebTestCase
         self::assertResponseRedirects('/login');
     }
 
+    public function testPublicDemoLoads(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/demo');
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('body', 'TXT + Bilder rein');
+        self::assertSelectorTextContains('body', '60-Sekunden-Flow');
+
+        $client->request('GET', '/demo-imports/sectionscode-testpaket.zip');
+        self::assertResponseIsSuccessful();
+        self::assertStringContainsString('attachment;', (string) $client->getResponse()->headers->get('content-disposition'));
+    }
+
     public function testAdminCanLoginAndOpenProductAreas(): void
     {
         $client = static::createClient();

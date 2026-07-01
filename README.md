@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml/badge.svg)](https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml)
 
-Live-Demo: [cc.mcmonaco.de](https://cc.mcmonaco.de)
+Demo deployed at: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
 
 Symfony-Plattform für einen geschützten Produkt-Workflow von CMS-/Dateiimport bis zu marktplatzfähigen Amazon- und Shopware-Listings.
 

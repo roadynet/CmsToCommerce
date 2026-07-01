@@ -27,6 +27,8 @@ security:
 
     access_control:
         - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/demo$, roles: PUBLIC_ACCESS }
+        - { path: ^/demo-imports/, roles: PUBLIC_ACCESS }
         - { path: ^/api/intake$, roles: PUBLIC_ACCESS }
         - { path: ^, roles: ROLE_ADMIN }
 

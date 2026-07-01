@@ -14,7 +14,7 @@
     <body>
         <header class="site-header">
             <div class="shell row-between">
-                <a class="brand" href="{{ path('app_dashboard') }}">CMS to Commerce Hub</a>
+                <a class="brand" href="{{ is_granted('ROLE_ADMIN') ? path('app_dashboard') : path('app_public_demo') }}">CMS to Commerce Hub</a>
                 <nav class="site-nav">
                     {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('app_dashboard') }}">Übersicht</a>
@@ -30,6 +30,7 @@
                             </div>
                         </details>
                     {% else %}
+                        <a href="{{ path('app_public_demo') }}">Demo</a>
                         <a href="{{ path('app_login') }}">Anmelden</a>
                     {% endif %}
                 </nav>

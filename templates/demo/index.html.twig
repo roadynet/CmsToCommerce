@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demo · CMS to Commerce Hub{% endblock %}
+
+{% block body %}
+    <section class="hero demo-hero">
+        <div>
+            <p class="eyebrow">Live-Demo</p>
+            <h1>TXT + Bilder rein. Produktseiten für Amazon und Shopware raus.</h1>
+            <p class="hero-copy">
+                Eine kompakte Recruiter-Demo für den Flow von CMS-/Dateiimport über Produktstamm
+                und Marketplace-Preview bis zu Zugangsdaten, Sync-Jobs und Write-back.
+            </p>
+        </div>
+        <div class="hero-actions">
+            <a class="button button-primary" href="#demo-flow">Demo-Flow ansehen</a>
+            <a class="button" href="{{ path('app_demo_import_download', {filename: 'sectionscode-testpaket.zip'}) }}">Testpaket laden</a>
+            <a class="button" href="{{ path('app_login') }}">Admin öffnen</a>
+        </div>
+    </section>
+
+    <section class="panel demo-strip">
+        <div>
+            <span class="badge badge-success">Demo deployed</span>
+            <h2>cc.mcmonaco.de/demo</h2>
+            <p>Öffentliche Produktdemo ohne Secrets. Der Admin-Bereich bleibt geschützt.</p>
+        </div>
+        <div class="demo-flow-line" aria-label="Kurzflow">
+            <span>TXT + Bilder</span>
+            <span>Produkt</span>
+            <span>Amazon / Shopware Preview</span>
+            <span>Zugangsdaten / Sync</span>
+        </div>
+    </section>
+
+    <section id="demo-flow" class="panel dashboard-panel">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">60-Sekunden-Flow</p>
+                <h2>So klickt sich die Demo</h2>
+            </div>
+            <p class="section-copy">
+                Die echte Verarbeitung liegt im geschützten Admin. Diese Seite zeigt den Ablauf öffentlich und verweist auf das Testpaket.
+            </p>
+        </div>
+
+        <div class="workflow-grid">
+            {% for item in flow_steps %}
+                <article class="mini-card workflow-card">
+                    <span class="workflow-step">{{ item.step }}</span>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.body }}</p>
+                    <pre class="code-block">{{ item.sample }}</pre>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">Preview</p>
+                    <h2>Kanäle auf einen Blick</h2>
+                </div>
+            </div>
+
+            <div class="stack">
+                {% for card in preview_cards %}
+                    <article class="mini-card">
+                        <div class="row-between">
+                            <span class="badge">{{ card.label }}</span>
+                            <span class="badge badge-success">{{ card.status }}</span>
+                        </div>
+                        <h3>{{ card.title }}</h3>
+                        <p>{{ card.body }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel demo-product-card">
+            <p class="eyebrow">Beispielprodukt</p>
+            <h2>North Trail Edelstahl Trinkflasche 750 ml</h2>
+            <p>
+                Robuste doppelwandige Trinkflasche für Alltag, Sport und Reisen. Aus dem Rohtext entstehen
+                Amazon-Bulletpoints, Shopware-Beschreibung, technische Attribute und eine saubere Bildreihenfolge.
+            </p>
+
+            <ul class="simple-list compact-list">
+                <li><span>Qualitätswert</span><strong>92 / 100</strong></li>
+                <li><span>Medien</span><strong>4 Bilder</strong></li>
+                <li><span>Varianten</span><strong>Farbe + Größe</strong></li>
+                <li><span>Pflichtfelder</span><strong>vollständig</strong></li>
+            </ul>
+
+            <div class="button-group">
+                <a class="button button-primary" href="{{ path('app_login') }}">Admin öffnen</a>
+                <a class="button" href="{{ path('app_demo_import_download', {filename: '3-produkte-sammeldatei.txt'}) }}">TXT-Beispiel</a>
+                <details class="action-menu">
+                    <summary class="button">Mehr</summary>
+                    <div class="action-menu-list">
+                        <a href="https://github.com/roadynet/CmsToCommerce" target="_blank" rel="noreferrer noopener">GitHub öffnen</a>
+                        <a href="https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml" target="_blank" rel="noreferrer noopener">CI ansehen</a>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Warum interessant?</p>
+                <h2>Was Recruiter sofort sehen sollen</h2>
+            </div>
+        </div>
+
+        <div class="quick-grid">
+            <article class="mini-card">
+                <h3>Produktlogik statt Landingpage</h3>
+                <p>Import, Normalisierung, Varianten, Medien und Kanal-Payloads sind in Services gekapselt.</p>
+            </article>
+            <article class="mini-card">
+                <h3>Echte Integrationsarchitektur</h3>
+                <p>Amazon, Shopware, JTL, plentymarkets, Xentral, SAP R/3, Pimcore und Shopify sind als Adapter gedacht.</p>
+            </article>
+            <article class="mini-card">
+                <h3>Professioneller GitHub-Auftritt</h3>
+                <p>README, Screenshots, Demo-GIF und GitHub Actions zeigen den Projektstand ohne lokale Einrichtung.</p>
+            </article>
+        </div>
+    </section>
+{% endblock %}

@@ -385,6 +385,51 @@ small {
     font-weight: 700;
 }
 
+.demo-hero {
+    align-items: center;
+}
+
+.demo-strip {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 1.35fr);
+    gap: 1.25rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    background:
+        linear-gradient(135deg, rgba(79, 140, 255, 0.16), rgba(40, 195, 138, 0.08)),
+        rgba(255, 255, 255, 0.02);
+}
+
+.demo-strip h2 {
+    margin: 0.55rem 0 0.35rem;
+}
+
+.demo-flow-line {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.demo-flow-line span {
+    display: flex;
+    min-height: 4.5rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: rgba(11, 18, 32, 0.45);
+    color: #dce7ff;
+    font-weight: 700;
+    text-align: center;
+}
+
+.demo-product-card {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+}
+
 .simple-list,
 .bullets {
     padding-left: 1rem;
@@ -930,6 +975,11 @@ textarea {
     }
 
     .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .demo-strip,
+    .demo-flow-line {
         grid-template-columns: 1fr;
     }
 }
