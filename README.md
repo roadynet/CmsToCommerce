@@ -50,7 +50,7 @@ GET /products/{id}/export/shopware
 | Welche Engineering-Entscheidungen stecken dahinter? | [Architektur](docs/architecture.md) |
 | Wie sieht das Projekt für Recruiter aus? | [Recruiter-Überblick](docs/recruiter-overview.md) |
 | Welche Praxis ist belegbar? | [Production Evidence](docs/production-evidence.md) |
-| Wie werden Betrieb, Datenbank und Secrets behandelt? | [Operations](docs/operations.md) |
+| Wie werden Betrieb, Datenbank und Secrets behandelt? | [OPERATIONS.md](OPERATIONS.md) |
 | Wie werden externe Systeme erweitert? | [Integrations-Roadmap](docs/integration-roadmap.md) |
 
 Senior-Signale im Projekt:
@@ -67,6 +67,7 @@ Senior-Signale im Projekt:
 Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, Architektur-Highlights und Integrationen liegt hier:
 
 - [Recruiter-Überblick](docs/recruiter-overview.md)
+- [Operations Runbook](OPERATIONS.md)
 
 ## Enthaltene Funktionen
 

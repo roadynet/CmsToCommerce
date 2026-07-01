@@ -7,6 +7,51 @@ veröffentlichen.
 
 Live-Demo: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
 
+## Live- und Evidence-URLs
+
+| Evidence | Link |
+| --- | --- |
+| CTC Live-Demo | [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo) |
+| CTC GitHub Actions | [CI](https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml) |
+| Operations Runbook | [OPERATIONS.md](../OPERATIONS.md) |
+| Datenbank-Case-Study | [Case Study: Migration fehlte](case-study-database-migration.md) |
+| Recruiter-Überblick | [recruiter-overview.md](recruiter-overview.md) |
+
+## Hosting und Betriebsarbeit
+
+CTC läuft als Symfony-Anwendung in einer Shared-Hosting-/Serverumgebung mit SSH,
+Composer, produktivem Cache, privaten Environment-Dateien und Doctrine-
+Migrationen. Exakte Server-User, DB-URLs und Tokens werden aus Sicherheitsgründen
+nicht veröffentlicht.
+
+Selbst umgesetzt:
+
+- Symfony-Projekt auf eigenen Serverpfad deployed
+- Domain auf den Projektpfad geschaltet
+- Composer-Abhängigkeiten und Prod-Cache geprüft
+- Doctrine-Migrationen angewendet und Schema synchronisiert
+- private Secrets aus dem Repository herausgezogen
+- Credential-Portal mit maskierter Anzeige gebaut
+- Shopware-/Amazon-/ERP-/PIM-Adapter mit Live-Sperren vorbereitet
+- Fehlerfälle dokumentiert und in Operations-Routinen übersetzt
+
+## Screenshot- und Nachweis-Map
+
+| Nachweis | Öffentlich im Repo | Hinweis |
+| --- | --- | --- |
+| Live-Demo | [00-public-demo.png](screenshots/00-public-demo.png) | öffentlicher Einstieg ohne Login |
+| Demo-Flow | [00-demo-flow.gif](screenshots/00-demo-flow.gif) | TXT + Bilder -> Produkt -> Preview |
+| Credential-Portal maskiert | [04-zugangsdaten.png](screenshots/04-zugangsdaten.png) | keine echten Secrets sichtbar |
+| Sync-Jobs | [06-sync-jobs.png](screenshots/06-sync-jobs.png) | Delta-Sync/Write-back sichtbar |
+| Produktdetail | [05-produktdetail.png](screenshots/05-produktdetail.png) | Rohdaten, Medien, Listings |
+| GitHub Actions grün | [CI Badge/Actions](https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml) | CI-Lauf öffentlich prüfbar |
+| DB-Migration erfolgreich | [Case Study](case-study-database-migration.md) | als sanitized Command-Flow dokumentiert |
+| Prod-Cache/Deployment-Check | [OPERATIONS.md](../OPERATIONS.md) | keine Server-Screens mit Secrets veröffentlicht |
+
+Server- und Terminal-Screenshots werden nur bereinigt oder im Gespräch live
+gezeigt, weil Pfade, Usernamen, DB-Namen oder Tokens sonst versehentlich
+sichtbar werden können.
+
 ## Was damit belegbar ist
 
 | Praxisbereich | Nachweis im Projekt | Relevanz |
@@ -95,6 +140,20 @@ php bin/console cache:warmup --env=prod
 **Praxis-Signal:** Deployments werden nicht als Kopieren von Dateien verstanden,
 sondern als kontrollierter Betriebszustand aus Code, Cache, Assets, Datenbank und
 Konfiguration.
+
+## Kurze Case Study: Produktionsproblem gelöst
+
+**Problem:** Nach Deployment stand im Dashboard `Datenbank noch nicht bereit`.
+
+**Analyse:** Doctrine-Migrationsstatus und Schema-Validation zeigten, dass Code
+und Datenbank nicht auf demselben Stand waren. Die Tabelle `external_sync_job`
+fehlte produktiv.
+
+**Lösung:** Offene Migration angewendet, Schema validiert, Prod-Cache geleert und
+gewärmt, danach Live-Routen erneut geprüft.
+
+**Ergebnis:** Dashboard, Produktliste und Sync-Jobs waren wieder stabil. Die
+komplette Case Study liegt hier: [case-study-database-migration.md](case-study-database-migration.md).
 
 ## Interview-Demo in 5 Minuten
 

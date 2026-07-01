@@ -199,6 +199,8 @@ Für lokale Entwicklung nutzt die committed `.env` nur Dummy- und Defaultwerte. 
 
 - [Architektur](architecture.md)
 - [Praxisnachweis / Production Evidence](production-evidence.md)
+- [Operations Runbook](../OPERATIONS.md)
+- [Case Study: Produktionsproblem gelöst](case-study-database-migration.md)
 - [Integrations-Roadmap](integration-roadmap.md)
 - [Betrieb, Deployment und Datenbank](operations.md)
 - [Private Config Beispiel](private-config.example.env)
