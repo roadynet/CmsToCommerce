@@ -52,6 +52,7 @@ GET /products/{id}/export/shopware
 | Welche Praxis ist belegbar? | [Production Evidence](docs/production-evidence.md) |
 | Wie werden Betrieb, Datenbank und Secrets behandelt? | [OPERATIONS.md](OPERATIONS.md) |
 | Wie argumentiere ich das im Gespräch? | [Interview-Pitch](docs/interview-pitch.md) |
+| Welche Audits gibt es? | [Audit Report](docs/audit-report-2026-07-01.md) · [Quality Report](docs/quality-report.md) |
 | Wie werden externe Systeme erweitert? | [Integrations-Roadmap](docs/integration-roadmap.md) |
 
 Senior-Signale im Projekt:
@@ -70,6 +71,9 @@ Eine kompakte, GitHub-taugliche Projektvorstellung mit Screenshots, Tech-Stack, 
 - [Recruiter-Überblick](docs/recruiter-overview.md)
 - [Operations Runbook](OPERATIONS.md)
 - [Interview-Pitch](docs/interview-pitch.md)
+- [Audit Report](docs/audit-report-2026-07-01.md)
+- [Quality Report](docs/quality-report.md)
+- [Evidence Index](docs/evidence/README.md)
 
 ## Enthaltene Funktionen
 

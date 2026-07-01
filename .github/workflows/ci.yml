@@ -36,3 +36,89 @@ jobs:
 
       - name: Run PHPUnit
         run: php bin/phpunit
+
+      - name: Check local Markdown links
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          import sys
+
+          failures = []
+          pattern = re.compile(r'!?\[[^\]]*\]\(([^)]+)\)')
+          skipped = {'.git', 'vendor', 'node_modules', 'var'}
+
+          for path in Path('.').rglob('*.md'):
+              if any(part in skipped for part in path.parts):
+                  continue
+              text = path.read_text(encoding='utf-8', errors='ignore')
+              for match in pattern.finditer(text):
+                  target = match.group(1).strip()
+                  if not target or target.startswith(('http://', 'https://', 'mailto:', '#')):
+                      continue
+                  clean = target.split('#', 1)[0]
+                  if not clean:
+                      continue
+                  if not (path.parent / clean).exists():
+                      failures.append(f'{path}: missing local link target {target}')
+
+          if failures:
+              print('\n'.join(failures))
+              sys.exit(1)
+
+      - name: Check environment file policy
+        shell: python
+        run: |
+          from pathlib import Path
+          import sys
+
+          allowed = {
+              '.env',
+              '.env.dev',
+              '.env.example',
+              '.env.test',
+              'docs/private-config.example.env',
+          }
+          forbidden = []
+
+          for path in Path('.').rglob('.env*'):
+              if '.git' in path.parts or 'vendor' in path.parts or 'var' in path.parts:
+                  continue
+              normalized = path.as_posix()
+              if path.name not in allowed and normalized not in allowed:
+                  forbidden.append(normalized)
+
+          if forbidden:
+              print('Unexpected environment files committed:')
+              print('\n'.join(forbidden))
+              sys.exit(1)
+
+      - name: Check for obvious leaked token patterns
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          import sys
+
+          patterns = [
+              re.compile(r'github_pat_[A-Za-z0-9_]+'),
+              re.compile(r'ghp_[A-Za-z0-9_]+'),
+              re.compile(r'sk-[A-Za-z0-9]{20,}'),
+              re.compile(r'xox[baprs]-[A-Za-z0-9-]{20,}'),
+          ]
+          suffixes = {'.md', '.php', '.twig', '.yml', '.yaml', '.env', '.txt', '.json', '.js', '.css'}
+          failures = []
+
+          for path in Path('.').rglob('*'):
+              if '.git' in path.parts or 'vendor' in path.parts or 'var' in path.parts:
+                  continue
+              if path.is_dir() or path.suffix.lower() not in suffixes:
+                  continue
+              text = path.read_text(encoding='utf-8', errors='ignore')
+              for pattern in patterns:
+                  if pattern.search(text):
+                      failures.append(f'{path}: possible leaked token pattern found')
+
+          if failures:
+              print('\n'.join(failures))
+              sys.exit(1)
