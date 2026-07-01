@@ -49,6 +49,7 @@ GET /products/{id}/export/shopware
 | Was macht das Produkt? | [Live-Demo](https://cc.mcmonaco.de/demo) |
 | Welche Engineering-Entscheidungen stecken dahinter? | [Architektur](docs/architecture.md) |
 | Wie sieht das Projekt für Recruiter aus? | [Recruiter-Überblick](docs/recruiter-overview.md) |
+| Welche Praxis ist belegbar? | [Production Evidence](docs/production-evidence.md) |
 | Wie werden Betrieb, Datenbank und Secrets behandelt? | [Operations](docs/operations.md) |
 | Wie werden externe Systeme erweitert? | [Integrations-Roadmap](docs/integration-roadmap.md) |
 
@@ -59,6 +60,7 @@ Senior-Signale im Projekt:
 - Live-Schreibvorgänge sind per Default deaktiviert und brauchen explizite Serverfreigaben
 - CI prüft Composer, Container, Twig und PHPUnit
 - produktive Secrets bleiben außerhalb des Repositories
+- die [Production Evidence](docs/production-evidence.md) dokumentiert echte Betriebsfälle: 500er-Analyse, Migrationen, Cache/Assets, Secrets und Integrationsgrenzen
 
 ## Recruiter / Projektüberblick
 

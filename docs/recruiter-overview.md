@@ -6,6 +6,9 @@ Der Fokus liegt nicht auf einer kleinen Demo-Seite, sondern auf einer sauberen I
 
 Live-Demo: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
 
+Praxisnachweis für Betrieb, Deployments und Fehleranalyse:
+[Production Evidence](production-evidence.md)
+
 ## Kurzprofil
 
 | Bereich | Umsetzung |
@@ -101,6 +104,7 @@ Live-Demo: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
 - Fehlerfälle werden als Sync-/Publication-Runs sichtbar statt still verschluckt.
 - CI prüft Composer, Symfony-Container, Twig-Templates und PHPUnit.
 - Architektur- und Operations-Doku zeigen nicht nur Features, sondern Betrieb, Risiken und Trade-offs.
+- Die Production-Evidence dokumentiert konkrete Betriebsfälle: 500er-Analyse, offene Migration, Cache-/Asset-Routine, Secrets-Trennung und sichere Integrationsgrenzen.
 
 ### Erweiterbare Adapter-Struktur
 
@@ -194,6 +198,7 @@ Für lokale Entwicklung nutzt die committed `.env` nur Dummy- und Defaultwerte. 
 ## Weiterführende Dokumentation
 
 - [Architektur](architecture.md)
+- [Praxisnachweis / Production Evidence](production-evidence.md)
 - [Integrations-Roadmap](integration-roadmap.md)
 - [Betrieb, Deployment und Datenbank](operations.md)
 - [Private Config Beispiel](private-config.example.env)
