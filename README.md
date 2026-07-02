@@ -6,6 +6,14 @@ Demo deployed at: [cc.mcmonaco.de/demo](https://cc.mcmonaco.de/demo)
 
 CMS to Commerce Hub ist eine Symfony-Plattform, die Produktdaten aus CMS-, PIM-, ERP- und Datei-Quellen übernimmt und daraus marktplatzfähige Produktseiten für Amazon und Shopware vorbereitet.
 
+## Audit & Evidence
+
+- [Audit Report](docs/audit-report-2026-07-01.md)
+- [Quality Report](docs/quality-report.md)
+- [Evidence Index](docs/evidence/README.md)
+- [Production Evidence](docs/production-evidence.md)
+- [Operations Runbook](OPERATIONS.md)
+
 ## Auf einen Blick
 
 - **Was ist es?** Ein Commerce Integration Hub für Produktimport, Listing-Erzeugung, Medienzuordnung, Kanal-Preview und Sync-/Write-back-Flows.
