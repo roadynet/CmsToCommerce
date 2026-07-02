@@ -5,10 +5,9 @@
 This audit documents the current static-analysis and quality-gate position for
 CTC.
 
-SkillBuilder has a documented PHPStan cleanup in its private codebase. CTC does
-not yet publish a PHPStan baseline. Instead, the current public gate combines
-Composer validation, Symfony container linting, Twig linting, PHPUnit and
-secret/link checks.
+CTC now publishes a PHPStan setup without a baseline. The public gate combines
+Composer validation, Symfony container linting, Twig linting, PHPStan, PHPUnit
+and secret/link checks.
 
 ## Current Gates
 
@@ -16,6 +15,7 @@ secret/link checks.
 composer validate --strict
 php bin/console lint:container --env=test
 php bin/console lint:twig templates
+vendor/bin/phpstan analyse --memory-limit=1G
 php bin/phpunit
 Markdown link check
 secret-token pattern check
@@ -27,44 +27,33 @@ GitHub Actions CI
 ```text
 54 tests
 462 assertions
+PHPStan: no errors
 CI: success
 ```
 
-## Why PHPStan Is Not Claimed Yet
+## PHPStan Position
 
-No public PHPStan baseline is committed for CTC at this stage. Claiming PHPStan
-coverage without a repeatable committed setup would weaken the evidence.
-
-The honest current position is:
+The current position is:
 
 - Symfony container lint validates service wiring and constructor injection.
 - PHPUnit protects domain and integration-normalization logic.
 - Twig lint protects templates.
+- PHPStan level 3 protects PHP code paths in `src` and `tests`.
 - CI makes the checks repeatable.
-- PHPStan remains a tracked next quality gate.
+- No baseline is needed for the current level 3 setup.
 
-## Proposed Next Step
+## Implemented Setup
 
-Add a dedicated PHPStan setup:
-
-```text
-composer require --dev phpstan/phpstan phpstan/extension-installer phpstan/phpstan-symfony
-```
-
-Then add:
+Committed setup:
 
 ```text
 phpstan.neon
-phpstan-baseline.neon if needed
-CI step: vendor/bin/phpstan analyse
+phpstan/phpstan
+phpstan/phpstan-symfony
+CI step: vendor/bin/phpstan analyse --memory-limit=1G
 ```
-
-The preferred approach is to start narrow, for example `src/Service`,
-`src/Integration` and `tests`, then expand toward entities/controllers with a
-small explainable baseline.
 
 ## Audit Position
 
-The project has repeatable CI quality gates today and a clearly documented path
-to static analysis tomorrow. This is intentionally documented as a gap rather
-than hidden behind vague quality claims.
+The project has repeatable CI quality gates including static analysis. Future
+work can raise the PHPStan level gradually once the current level remains stable.

@@ -64,6 +64,7 @@ Performed checks:
 - Composer validation
 - Symfony container lint
 - Twig lint
+- PHPStan Level 3
 - PHPUnit
 - Markdown link check
 - secret-token pattern scan

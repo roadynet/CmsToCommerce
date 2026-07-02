@@ -21,7 +21,7 @@ CMS to Commerce Hub ist eine Symfony-Plattform, die Produktdaten aus CMS-, PIM-,
 - **PHPUnit:** 54 Tests / 462 Assertions für Import, Listing-Erzeugung, Amazon/Shopware-Exports, ERP/PIM-Adapter und Credential-Handling.
 - **Symfony-Gates:** Composer-Validierung, Container-Lint und Twig-Lint laufen bei jedem Push.
 - **Portfolio-Schutz:** Markdown-Linkcheck, Env-Policy und Secret-Pattern-Scan sind Teil der CI.
-- **PHPStan:** als dokumentierter nächster Quality Gate geführt, ohne falschen Public-Claim.
+- **PHPStan:** Level 3 läuft mit Symfony-Unterstützung als verpflichtender CI-Quality-Gate.
 
 ## Auf einen Blick
 
@@ -77,7 +77,7 @@ Senior-Signale im Projekt:
 - fachliche Logik liegt in Services statt in Controllern
 - externe Systeme werden über Adapter, Normalizer und Preview-/Publish-Gates getrennt
 - Live-Schreibvorgänge sind per Default deaktiviert und brauchen explizite Serverfreigaben
-- CI prüft Composer, Container, Twig und PHPUnit
+- CI prüft Composer, Container, Twig, PHPStan und PHPUnit
 - produktive Secrets bleiben außerhalb des Repositories
 - die [Production Evidence](docs/production-evidence.md) dokumentiert echte Betriebsfälle: 500er-Analyse, Migrationen, Cache/Assets, Secrets und Integrationsgrenzen
 
