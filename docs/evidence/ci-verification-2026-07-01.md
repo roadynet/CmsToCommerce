@@ -11,7 +11,7 @@ Recorded status:
 ```text
 Workflow: CI
 Status: success
-URL: https://github.com/roadynet/CmsToCommerce/actions/runs/28535006837
+Workflow URL: https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml
 ```
 
 ## Local Checks
