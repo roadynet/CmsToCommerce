@@ -14,6 +14,15 @@ CMS to Commerce Hub ist eine Symfony-Plattform, die Produktdaten aus CMS-, PIM-,
 - [Production Evidence](docs/production-evidence.md)
 - [Operations Runbook](OPERATIONS.md)
 
+## Tests & Quality Gates
+
+[![PHPUnit + Symfony Quality Gates](https://img.shields.io/github/actions/workflow/status/roadynet/CmsToCommerce/ci.yml?branch=main&label=PHPUnit%20%2B%20Symfony%20Quality%20Gates)](https://github.com/roadynet/CmsToCommerce/actions/workflows/ci.yml)
+
+- **PHPUnit:** 54 Tests / 462 Assertions für Import, Listing-Erzeugung, Amazon/Shopware-Exports, ERP/PIM-Adapter und Credential-Handling.
+- **Symfony-Gates:** Composer-Validierung, Container-Lint und Twig-Lint laufen bei jedem Push.
+- **Portfolio-Schutz:** Markdown-Linkcheck, Env-Policy und Secret-Pattern-Scan sind Teil der CI.
+- **PHPStan:** als dokumentierter nächster Quality Gate geführt, ohne falschen Public-Claim.
+
 ## Auf einen Blick
 
 - **Was ist es?** Ein Commerce Integration Hub für Produktimport, Listing-Erzeugung, Medienzuordnung, Kanal-Preview und Sync-/Write-back-Flows.

@@ -8,7 +8,7 @@ on:
 
 jobs:
   tests:
-    name: Symfony tests
+    name: PHPUnit and Symfony quality gates
     runs-on: ubuntu-latest
 
     steps:
