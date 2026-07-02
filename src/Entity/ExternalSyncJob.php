@@ -266,9 +266,7 @@ class ExternalSyncJob
     #[ORM\PrePersist]
     public function initializeTimestamps(): void
     {
-        $now = new \DateTimeImmutable();
-        $this->createdAt = $this->createdAt ?? $now;
-        $this->updatedAt = $now;
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]

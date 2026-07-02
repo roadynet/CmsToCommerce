@@ -34,6 +34,9 @@ jobs:
       - name: Lint Twig templates
         run: php bin/console lint:twig templates
 
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --memory-limit=1G
+
       - name: Run PHPUnit
         run: php bin/phpunit
 
